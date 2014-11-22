@@ -3,8 +3,6 @@
 var express = require('express');
 var fs      = require('fs');
 
-console.log("Loading");
-
 var SampleApp = function() {
 
     //  Scope.
@@ -111,7 +109,8 @@ var SampleApp = function() {
      */
     self.initializeServer = function() {
         self.createRoutes();
-        self.app = express.createServer();
+        //self.app = express.createServer();
+        self.app = express();
 
         //  Add handlers for the app (from the routes).
         for (var r in self.routes) {
@@ -155,7 +154,7 @@ var zapp = new SampleApp();
 zapp.initialize();
 zapp.start();
 
-//console.log(zapp.app);
+console.log("**LOADDED**");
 
 //var port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 /*
