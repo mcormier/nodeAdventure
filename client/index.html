@@ -10,6 +10,13 @@
   <div id="narrative">
     <div id="workarea">
 
+      <div class="startScreen">
+      You are on Argyle street on a cold December night.
+      To the south is the door to the Diamond.
+      To the east is the door to the Backstage Bar.
+      To the north is the door to the Economy Shoe Shop.
+      </div>
+
       <div class="console">
       &gt; 
         <input id="console" maxlength="40" />
@@ -20,7 +27,7 @@
 
   <script>
 
-    var local = true;
+    var local = false;
 
     var socket;
     if (local) {
@@ -37,6 +44,10 @@
        var t = document.createTextNode(msg);
        newDiv.appendChild(t);
        display.appendChild(newDiv);
+    });
+
+    socket.on('stories', function (msg) {
+       console.log("Received story list " + msg);
     });
 
 

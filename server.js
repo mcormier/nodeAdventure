@@ -1,32 +1,41 @@
 #!/bin/env node
 
-//console.log(process.env);
-
-
 var port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP;
 if (typeof ipaddress === "undefined") {
-   console.warn('No OPENSHIFT_NODEJS_IP var, using 127.0.0.1');
   ipaddress = "127.0.0.1";
+  console.warn('No OPENSHIFT_NODEJS_IP var, using ' + ipaddress);
 };
  
 var http = require('http');
 
 var app = http.createServer(function (req, res) {
   res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hello World\n');
+  res.end('"If they can get you asking the wrong questions, they don\'t have to worry about answers."\n -- Thomas Pynchon, Gravity\'s Rainbow \n');
 }).listen(port, ipaddress);
 
 var io  = require('socket.io')(app);
 
+var storyManager = require("./storyManager");
+
 io.on('connection', function (socket) {
-  //io.emit('this', { will: 'be received by everyone'});
+
+  var storyChosen = false;
+  console.log("TODO - what story are you connecting to?");
+
+  socket.emit('stories', "catss|blah");
+
+  socket.username = "testing";
+
 
   socket.on('command', function(msg) {
     console.log("Recieved: " + msg );
 
-
-    socket.emit('display text', 'Processing...');
+    if (storyChosen == false) {
+      socket.emit('display text', 'ERROR - need to choose the story first. ' );
+      return;
+    }
+    socket.emit('display text', 'Processing...' );
 
   });
 

@@ -31,3 +31,8 @@ div .console {
   background:none; font-family:Pixel, Courier;
   width:400px; font-size:large; border:none;
 }
+
+.startScreen {
+  width:  550px;
+  height: 250px;
+}
