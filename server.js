@@ -23,6 +23,7 @@ console.log("Stories loaded " + storyManager.stories() );
 io.on('connection', function (socket) {
 
   var storyChosen = false;
+  var story = null;
 
   // Give the client a list of stories to choose from
   socket.emit('stories', storyManager.stories() );
@@ -31,9 +32,10 @@ io.on('connection', function (socket) {
   socket.on('chooseStory', function(storyName) {
 
     if (storyManager.storyExists(storyName)) {
+      story = storyManager.readStory(storyName);
       storyChosen = true;
-      console.log("TODO -  create story object, etc..");
-      console.log("TODO - send story introduction");
+      console.log(story.introText() );
+      socket.emit('display text', story.introText() );
     }
   });
 

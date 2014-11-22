@@ -1,8 +1,12 @@
 var parsed = require('./stories.json');
 
 var storyList = [];
+var storyGenerators = [];
 for (var i = 0; i < parsed.stories.length; i++ ) {
+    var storyLoader =  require(parsed.stories[i].file);
+    console.log("Parsed " + parsed.stories[i].file );
     storyList.push(parsed.stories[i].title);
+    storyGenerators.push(storyLoader);
 }
 
 function stories() {
@@ -16,8 +20,12 @@ function storyExists(storyName) {
 
 
 function readStory(storyName) {
-  console.log("TODO - create a story object ..." );
-  
+  var index = storyList.indexOf(storyName); 
+  var generator = storyGenerators[index];
+
+  console.log("TODO - create a story object ..." + index );
+
+  return generator.create();  
 }
 
 exports.stories = stories;

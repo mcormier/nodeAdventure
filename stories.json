@@ -1,6 +1,6 @@
 {
   "stories": [
-    { "title": "CATSS", "file": "catss.js" },
-    { "title": "DarkSecret", "file": "darksecret.js" }
+    { "title": "CATSS", "file": "./catss.js" },
+    { "title": "DarkSecret", "file": "./darksecret.js" }
   ]
 }
