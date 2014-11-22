@@ -1,0 +1,33 @@
+@font-face {
+  font-family: Pixel;
+  src: url('slkscr.ttf');
+}
+
+body { background: black; }
+
+#narrative { 
+    position:absolute;
+    width:651px;
+    height:509px;
+    background: url("cathode.png") no-repeat;
+}
+
+#workarea {
+  margin-top: 50px; margin-left: 50px;
+  width:  550px;
+  height: 350px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  font-family: Pixel, Courier;
+  font-size: large;
+}
+
+div .console {
+  position:absolute;  top:410px; font-family:Pixel, Courier;
+}
+
+#console {
+  background:none; font-family:Pixel, Courier;
+  width:400px; font-size:large; border:none;
+}
