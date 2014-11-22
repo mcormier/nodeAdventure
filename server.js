@@ -1,31 +1,8 @@
 #!/bin/env node
-//  OpenShift sample Node application
+
 var express = require('express');
 var fs      = require('fs');
 
-var port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
-var io      = require('socket.io')(port);
-
-
-io.on('connection', function (socket) {
-  //io.emit('this', { will: 'be received by everyone'});
-
-  socket.on('command', function(msg) {
-    console.log("Recieved: " + msg );
-
-
-    socket.emit('display text', 'Processing...');
-
-  });
-
-
-
-});
-
-
-/**
- *  Define the sample application.
- */
 var SampleApp = function() {
 
     //  Scope.
@@ -175,4 +152,39 @@ var SampleApp = function() {
 //var zapp = new SampleApp();
 //zapp.initialize();
 //zapp.start();
+
+//console.log(zapp.app);
+
+//var port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+/*
+var io      = require('socket.io')(8000);
+
+
+
+
+io.on('connection', function (socket) {
+  //io.emit('this', { will: 'be received by everyone'});
+
+  socket.on('command', function(msg) {
+    console.log("Recieved: " + msg );
+
+
+    socket.emit('display text', 'Processing...');
+
+  });
+
+
+
+});
+
+*/
+
+
+var http = require('http');
+var port = 8000;
+
+http.createServer(function (req, res) {
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Hello World\n');
+}).listen(port);
 
