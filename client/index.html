@@ -27,7 +27,7 @@
 
   <script>
 
-    var local = false;
+    var local = true;
 
     var socket;
     if (local) {
@@ -46,8 +46,13 @@
        display.appendChild(newDiv);
     });
 
-    socket.on('stories', function (msg) {
-       console.log("Received story list " + msg);
+    // StoryList returned is an array
+    socket.on('stories', function (storyList) {
+       console.log("Received story list " + storyList);
+       // This is a simple client that ignores the storyList and always asks
+       // for CATSS
+       socket.emit('chooseStory', 'CATSS'); 
+       //socket.emit('chooseStory', 'badStoryName'); 
     });
 
 

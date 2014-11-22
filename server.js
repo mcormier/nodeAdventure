@@ -17,22 +17,32 @@ var app = http.createServer(function (req, res) {
 var io  = require('socket.io')(app);
 
 var storyManager = require("./storyManager");
+console.log("Stories loaded " + storyManager.stories() );
+
 
 io.on('connection', function (socket) {
 
   var storyChosen = false;
-  console.log("TODO - what story are you connecting to?");
 
-  socket.emit('stories', "catss|blah");
+  // Give the client a list of stories to choose from
+  socket.emit('stories', storyManager.stories() );
 
-  socket.username = "testing";
+  // The client  chose a story
+  socket.on('chooseStory', function(storyName) {
 
+    if (storyManager.storyExists(storyName)) {
+      storyChosen = true;
+      console.log("TODO -  create story object, etc..");
+      console.log("TODO - send story introduction");
+    }
+  });
 
   socket.on('command', function(msg) {
     console.log("Recieved: " + msg );
 
     if (storyChosen == false) {
       socket.emit('display text', 'ERROR - need to choose the story first. ' );
+      socket.emit('display text', 'Available stories ' + storyManager.stories() );
       return;
     }
     socket.emit('display text', 'Processing...' );
