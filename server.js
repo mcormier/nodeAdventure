@@ -109,7 +109,6 @@ var SampleApp = function() {
      */
     self.initializeServer = function() {
         self.createRoutes();
-        //self.app = express.createServer();
         self.app = express();
 
         //  Add handlers for the app (from the routes).
@@ -154,7 +153,8 @@ var zapp = new SampleApp();
 zapp.initialize();
 zapp.start();
 
-console.log("**LOADDED**");
+console.log("**LOADED**");
+console.log(process.env);
 
 //var port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 /*
