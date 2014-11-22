@@ -111,6 +111,9 @@ var SampleApp = function() {
         self.createRoutes();
         self.app = express();
 
+        self.server = require('http').Server(self.app);
+        self.io  = require('socket.io')(self.server);
+
         //  Add handlers for the app (from the routes).
         for (var r in self.routes) {
             self.app.get(r, self.routes[r]);
@@ -154,7 +157,7 @@ zapp.initialize();
 zapp.start();
 
 console.log("**LOADED**");
-console.log(process.env);
+//console.log(process.env);
 
 //var port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 /*
