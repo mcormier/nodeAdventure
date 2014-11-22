@@ -2,13 +2,14 @@
 //  OpenShift sample Node application
 var express = require('express');
 var fs      = require('fs');
-var io      = require('socket.io')(8888);
+// var io      = require('socket.io')(8888);
 
-
+/*
 io.on('connection', function (socket) {
+  console.log("HERE");
   io.emit('this', { will: 'be received by everyone'});
 });
-
+*/
 
 /**
  *  Define the sample application.
