@@ -152,14 +152,15 @@ var SampleApp = function() {
 /**
  *  main():  Main code.
  */
-var zapp = new SampleApp();
-zapp.initialize();
-zapp.start();
+//var zapp = new SampleApp();
+//zapp.initialize();
+//zapp.start();
 
-console.log("**LOADED**");
 //console.log(process.env);
 
-//var port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+
+var port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+
 /*
 var io      = require('socket.io')(8000);
 
@@ -183,12 +184,10 @@ io.on('connection', function (socket) {
 
 */
 
-/*
 var http = require('http');
-var port = 8000;
 
 http.createServer(function (req, res) {
   res.writeHead(200, {'Content-Type': 'text/plain'});
   res.end('Hello World\n');
 }).listen(port);
-*/
+
