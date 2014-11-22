@@ -2,14 +2,26 @@
 //  OpenShift sample Node application
 var express = require('express');
 var fs      = require('fs');
-// var io      = require('socket.io')(8888);
 
-/*
+var port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+var io      = require('socket.io')(port);
+
+
 io.on('connection', function (socket) {
-  console.log("HERE");
-  io.emit('this', { will: 'be received by everyone'});
+  //io.emit('this', { will: 'be received by everyone'});
+
+  socket.on('command', function(msg) {
+    console.log("Recieved: " + msg );
+
+
+    socket.emit('display text', 'Processing...');
+
+  });
+
+
+
 });
-*/
+
 
 /**
  *  Define the sample application.
@@ -160,7 +172,7 @@ var SampleApp = function() {
 /**
  *  main():  Main code.
  */
-var zapp = new SampleApp();
-zapp.initialize();
-zapp.start();
+//var zapp = new SampleApp();
+//zapp.initialize();
+//zapp.start();
 
