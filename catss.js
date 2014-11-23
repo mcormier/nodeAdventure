@@ -1,7 +1,7 @@
 
 function Story() { }
 
-Story.prototype.introText = function () {
+Story.prototype.intro = function () {
 
   var intro = {};
   intro.location = "You are on Argyle street on a cold December night.";
@@ -12,9 +12,7 @@ Story.prototype.introText = function () {
                    + "To the east is the door to the Backstage Bar \n"
                    + "To the north is the door to the Economy Shoe Shop";
 
-  return "You are on Argyle Street on a cold December night.\n"
-        +"To the south is the door to the diamond."
-            
+  return intro;
 };
 
 

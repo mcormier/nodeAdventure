@@ -34,8 +34,8 @@ io.on('connection', function (socket) {
     if (storyManager.storyExists(storyName)) {
       story = storyManager.readStory(storyName);
       storyChosen = true;
-      console.log(story.introText() );
-      socket.emit('display text', story.introText() );
+      console.log(story.intro() );
+      socket.emit('display text', story.intro() );
     }
   });
 
