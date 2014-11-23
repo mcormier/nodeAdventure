@@ -22,9 +22,6 @@ function storyExists(storyName) {
 function readStory(storyName) {
   var index = storyList.indexOf(storyName); 
   var generator = storyGenerators[index];
-
-  console.log("TODO - create a story object ..." + index );
-
   return generator.create();  
 }
 

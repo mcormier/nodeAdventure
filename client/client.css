@@ -36,3 +36,28 @@ div .console {
   width:  550px;
   height: 250px;
 }
+
+
+#cmd span {
+  float:left;
+}
+
+#prompt {
+  float:left;
+}
+
+#cursor {
+  float: left;
+  width: 14px;
+  height: 14px;
+  background: black;
+  opacity: 1;
+
+  transition:           opacity 500ms ease-in-out;
+    -moz-transition:    opacity 500ms ease-in-out;
+    -ms-transition:     opacity 500ms ease-in-out; 
+    -o-transition:      opacity 500ms ease-in-out;
+    -webkit-transition: opacity 500ms;
+
+}
+

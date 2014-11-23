@@ -11,15 +11,19 @@
     <div id="workarea">
 
       <div class="startScreen">
-      You are on Argyle street on a cold December night.
-      To the south is the door to the Diamond.
-      To the east is the door to the Backstage Bar.
-      To the north is the door to the Economy Shoe Shop.
       </div>
 
       <div class="console">
+        <div id="cmd">
+          <div id="prompt"> &gt; </div>
+            <span id="cmd_input"></span>
+            <div id="cursor"></div>
+        </div>
+ 
+   <!-- 
       &gt; 
         <input id="console" maxlength="40" />
+   -->
       </div>
 
     </div>
@@ -28,6 +32,8 @@
   <script>
 
     var local = true;
+    var cursorAnim;
+    var command_string = "";
 
     var socket;
     if (local) {
@@ -51,22 +57,64 @@
        console.log("Received story list " + storyList);
        // This is a simple client that ignores the storyList and always asks
        // for CATSS
-       //socket.emit('chooseStory', 'CATSS'); 
-       socket.emit('chooseStory', 'DarkSecret'); 
-       //socket.emit('chooseStory', 'badStoryName'); 
+       socket.emit('chooseStory', 'CATSS'); 
+       //socket.emit('chooseStory', 'DarkSecret'); 
     });
 
 
-    function handleEnter(e) {
-      // TODO -- magic number
+    // Could push this into an editor class
+    function captureKeyInput(e) {
+      var input_elem = $("cmd_input");
+      //console.log(e.keyCode);
+
+      // Handle control characters first
       if (e.keyCode == 13 ) {
-        var command = $("console").value;
-        socket.emit('command', command);
-        console.log("TODO -- clear input field");
+        handleEnter(e);
+        return;
+      }
+
+      // Handle deletes
+      if (e.keyCode == 8 ) { 
+        command_string = command_string.substring(0,command_string.length-1);
+        input_elem.innerHTML = htmlForString(command_string);
+        return; 
+      }
+    
+      // Ignore other control characters, TAB, etc..
+      // Only accept A - Z input and SPACE
+      if ( ( e.keyCode < 65 || e.keyCode > 90 ) && e.keyCode != 32 ) { return; }
+      command_string = command_string + String.fromCharCode(e.keyCode);
+
+      input_elem.innerHTML = htmlForString(command_string);
+    }
+
+    function htmlForString(command) {
+        return command.replace(/ /g, "&nbsp;");
+    }
+
+
+    function handleEnter(e) {
+      if (e.keyCode == 13 ) {
+        socket.emit('command', command_string);
+        $("cmd_input").innerHTML='';
+        command_string = '';
       }
     }
 
-    PPUtils.bind('keyup', $("console"), handleEnter)
+    function toggleCursorVisibility() {
+      var elem = $('cursor');
+      var opacity = elem.style.opacity;
+      if ( opacity == 1 ) {
+        elem.style.opacity = 0;
+      } else {
+        elem.style.opacity = 1;
+      }
+    }
+
+
+    //PPUtils.bind('keyup', $("console"), handleEnter);
+    PPUtils.bind('keyup', document, captureKeyInput);
+    cursoAnim =  window.setInterval( toggleCursorVisibility, 600);
 
   </script>
 
