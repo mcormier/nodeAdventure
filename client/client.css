@@ -37,6 +37,9 @@ div .console {
   height: 250px;
 }
 
+.text_response {
+ width: 550px;
+}
 
 #cmd span {
   float:left;

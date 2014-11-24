@@ -41,23 +41,26 @@
       socket = io.connect('http://nodejs-catts.rhcloud.com:8000');
     }
 
-    socket.on('display text', function(msg) {
-       //console.log("Message from server: " + msg );
-
-       addTextToMonitor(msg.location);
+    socket.on('display', function(msg) {
        addBlankLIneToMonitor();
-       addTextToMonitor(msg.description);
-       addBlankLIneToMonitor();
-       addTextToMonitor(msg.directions);
+       addTextToMonitor(msg);
+       scrollToBottom();
     });
+
+    socket.on('errorMsg', function(msg) {
+       addBlankLIneToMonitor();
+       addTextToMonitor(msg);
+       scrollToBottom();
+    });
+
 
     // StoryList returned is an array
     socket.on('stories', function (storyList) {
        console.log("Received story list " + storyList);
        // This is a simple client that ignores the storyList and always asks
        // for CATSS
-       //socket.emit('chooseStory', 'CATSS'); 
-       socket.emit('chooseStory', 'DarkSecret'); 
+       socket.emit('chooseStory', 'CATSS'); 
+       //socket.emit('chooseStory', 'DarkSecret'); 
     });
 
     // HTML Display 
@@ -67,9 +70,16 @@
 
     function addDivWithText(msg) {
        var display = $("workarea");
-       var newDiv = document.createElement("div");
-       newDiv.innerHTML = msg;
-       display.appendChild(newDiv);
+       var div = document.createElement("div");
+       div.className = "text_response";
+
+       // Only convert blank lines or else word wrap won't work
+       if (!msg.replace(/\s/g, "").length) {
+         div.innerHTML = htmlForString(msg);
+       } else {
+         div.innerHTML = msg;
+       }
+       display.appendChild(div);
     }
 
     function addTextToMonitor(msg) {
@@ -79,6 +89,11 @@
         }
     }
 
+    // Simple version for now
+    function scrollToBottom () {
+       var display = $("workarea");
+       display.scrollTop += 100;
+    }
 
     // Keyboard input
     // -------------------------------------------------------------------------------------
@@ -115,6 +130,8 @@
 
     function handleEnter(e) {
       if (e.keyCode == 13 ) {
+        addBlankLIneToMonitor();
+        addTextToMonitor('> ' + command_string);
         socket.emit('command', command_string);
         $("cmd_input").innerHTML='';
         command_string = '';

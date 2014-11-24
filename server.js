@@ -20,6 +20,18 @@ var storyManager = require("./storyManager");
 console.log("Stories loaded " + storyManager.stories() );
 
 
+function parse_command( request ) {
+  var command = {};
+  var words = request.toLowerCase().split(' ');
+  command.verb = words[0];
+  if ( words.length > 1 ) {
+    command.target = words[1];
+  }
+
+  return command
+}
+
+
 io.on('connection', function (socket) {
 
   var storyChosen = false;
@@ -34,20 +46,26 @@ io.on('connection', function (socket) {
     if (storyManager.storyExists(storyName)) {
       story = storyManager.readStory(storyName);
       storyChosen = true;
-      console.log(story.intro() );
-      socket.emit('display text', story.intro() );
+      socket.emit('display', story.intro() );
+      console.log("Client started story: " + storyName);
     }
   });
 
-  socket.on('command', function(msg) {
-    console.log("Recieved: " + msg );
+  socket.on('command', function(request) {
 
     if (storyChosen == false) {
-      socket.emit('display text', 'ERROR - need to choose the story first. ' );
-      socket.emit('display text', 'Available stories ' + storyManager.stories() );
+      console.log("Can't send a command if no story chosen");
+      socket.emit('errorMsg', 'ERROR - need to choose the story first. ' );
+      socket.emit('errorMsg', 'Available stories ' + storyManager.stories() );
       return;
     }
-    socket.emit('display text', 'Processing...' );
+
+    command = parse_command(request); 
+    console.log("verb: " + command.verb );
+    console.log("target: " + command.target );
+    var response = story.process_command(command);
+
+    socket.emit('errorMsg', response );
 
   });
 
