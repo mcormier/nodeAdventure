@@ -1,18 +1,8 @@
-// TODO - duplicate ...
-//
-// def help(state, cmds=[], **kwargs):
-//     return [(False, "Commands: %s" % ', '.join(cmds.keys())),]
-//
-function help(state, verb, target, cmds) {
-  var keys = [];
-  for(var k in cmds) { keys.push(k); }
-
-  return "Commands: " + keys.join(", ");
-}
+var common  = require('./commands.js');
 
 var CMDS = {
-  "help": help,
-  "?": help
+  "help": common.help,
+  "?": common.help
 }
 // -------------------------------------------------------------------------
 function State() {

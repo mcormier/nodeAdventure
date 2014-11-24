@@ -1,3 +1,5 @@
+var common  = require('./commands.js');
+
 var ROOMS = {
   "road": {
     "short": "Ouside a lovely home.",
@@ -13,16 +15,10 @@ var ROOMS = {
 
 // -------------------------------------------------------------------------
 
-function help() {
-  var keys = [];
-  for(var k in CMDS) { keys.push(k); }
-
-  return "Commands: " + keys.join(", ");
-}
-
 var CMDS = {
-  "help": help,
-  "?": help
+  "help": common.help,
+  "?": common.help,
+  "read": common.read_item
 }
 
 // -------------------------------------------------------------------------
@@ -32,7 +28,7 @@ function State() {
 }
 
 // -------------------------------------------------------------------------
-function Story() { }
+function Story() { this.state = new State(); }
 
 
 Story.prototype.intro = function () {
@@ -45,12 +41,11 @@ Story.prototype.intro = function () {
 // cmd.verb
 // cmd.target
 //
-// Returns 
+// Returns a string response
 Story.prototype.process_command = function(cmd) {
 
   if ( CMDS[cmd.verb] ) {
-    console.log(CMDS[cmd.verb]());
-    return CMDS[cmd.verb]();
+    return CMDS[cmd.verb]( this.state, cmd.verb, cmd.target, CMDS );
   } else {
     return "Syntax error";
   }
