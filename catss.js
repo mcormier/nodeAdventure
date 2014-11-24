@@ -1,9 +1,7 @@
 var common  = require('./commands.js');
+var CMDS = common.commands();
 
-var CMDS = {
-  "help": common.help,
-  "?": common.help
-}
+
 // -------------------------------------------------------------------------
 function State() {
   this.room_name = "road";

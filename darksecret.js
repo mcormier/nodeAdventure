@@ -1,4 +1,5 @@
 var common  = require('./commands.js');
+var CMDS = common.commands();
 
 var ROOMS = {
   "road": {
@@ -13,13 +14,6 @@ var ROOMS = {
 
 };
 
-// -------------------------------------------------------------------------
-
-var CMDS = {
-  "help": common.help,
-  "?": common.help,
-  "read": common.read_item
-}
 
 // -------------------------------------------------------------------------
 function State() {

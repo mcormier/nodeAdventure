@@ -6,15 +6,27 @@ function help(state, verb, target, cmds) {
   return "Commands: " + keys.join(", ");
 }
 
-function read_item(state, verb, target, cmds) {
-  return "stub";
-}
-
 // def read_item(state, target_name=None, **kwargs):
 //   target = state.get_target(target_name)
 //   check_verb(target, "read")
 //   return [(False, "%s says '%s'" % (target.name(), target.verb_read())), ]
+function read_item(state, verb, target, cmds) {
+  return "stub";
+}
 
-exports.help = help;
-exports.read_item = read_item;
+
+// A default set of commands to use for a story.
+function commands() {
+
+   return  {
+    "help": help,
+    "?": help,
+    "read": read_item
+  }
+
+}
+
+
+exports.commands = commands;
+
 
