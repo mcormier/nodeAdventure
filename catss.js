@@ -1,7 +1,11 @@
 // TODO - duplicate ...
-function help() {
+//
+// def help(state, cmds=[], **kwargs):
+//     return [(False, "Commands: %s" % ', '.join(cmds.keys())),]
+//
+function help(state, verb, target, cmds) {
   var keys = [];
-  for(var k in CMDS) { keys.push(k); }
+  for(var k in cmds) { keys.push(k); }
 
   return "Commands: " + keys.join(", ");
 }
@@ -10,11 +14,16 @@ var CMDS = {
   "help": help,
   "?": help
 }
+// -------------------------------------------------------------------------
+function State() {
+  this.room_name = "road";
+  this.backpack = [];
+}
 
 
 // -------------------------------------------------------------------------
 //
-function Story() { }
+function Story() { this.state = new State(); }
 
 Story.prototype.intro = function () {
 
@@ -30,8 +39,7 @@ Story.prototype.intro = function () {
 Story.prototype.process_command = function(cmd) {
 
   if ( CMDS[cmd.verb] ) {
-    console.log(CMDS[cmd.verb]());
-    return CMDS[cmd.verb]();
+    return CMDS[cmd.verb]( this.state, cmd.verb, cmd.target, CMDS );
   } else {
     return "Syntax error";
   }
