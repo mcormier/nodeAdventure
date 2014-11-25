@@ -63,10 +63,14 @@ io.on('connection', function (socket) {
     command = parse_command(request); 
     console.log("verb: " + command.verb );
     console.log("target: " + command.target );
-    var response = story.process_command(command);
 
-    socket.emit('errorMsg', response );
+    try {
+      var response = story.process_command(command);
 
+      socket.emit('errorMsg', response );
+    } catch (e) {
+      socket.emit('errorMsg', e.message );
+    }
   });
 
 

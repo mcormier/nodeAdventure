@@ -6,16 +6,11 @@ function help(state, verb, target, cmds) {
   return "Commands: " + keys.join(", ");
 }
 
-// def check_verb(item, verb_name):
-//     if hasattr(item, 'verb_%s' % (verb_name, )):
-//             return item
-//                 raise CantDoThat()
 function check_verb(item, verb_name) {
-  if ( item["verb_" + verb_name] != "undefined" ) {
+  if ( item != undefined && item["verb_" + verb_name] != undefined ) {
     return item;
   }
-
-  // TODO -- raise can't do that error
+  throw { name: "CantDoThat", message: "I don't see that item here" }
 }
 
 function read_item(state, verb, target_name, cmds) {
@@ -27,13 +22,11 @@ function read_item(state, verb, target_name, cmds) {
 
 // A default set of commands to use for a story.
 function commands() {
-
    return  {
     "help": help,
     "?": help,
     "read": read_item
   }
-
 }
 
 
