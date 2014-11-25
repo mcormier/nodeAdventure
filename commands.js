@@ -67,5 +67,34 @@ function createState(rooms, room_name) {
   return new State(rooms, room_name);
 }
 
-
 exports.createGameState = createState;
+// -------------------------------------------------------------------------
+// State object
+// -------------------------------------------------------------------------
+function Story(state, cmds) { 
+  this.state = state;
+  this.cmds = cmds;
+}
+
+Story.prototype.process_command = function(cmd) {
+
+  if ( this.cmds[cmd.verb] ) {
+    return this.cmds[cmd.verb]( this.state, cmd.verb, cmd.target, this.cmds );
+  } else {
+    return "Syntax error";
+  }   
+
+}
+
+Story.prototype.default_context = function() {
+  var room = this.state.get_room();
+
+  return room["long"];
+}
+
+
+function createStory(state,cmds) {
+  return new Story(state, cmds);
+}
+
+exports.createStory = createStory;

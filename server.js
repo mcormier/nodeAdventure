@@ -46,7 +46,7 @@ io.on('connection', function (socket) {
     if (storyManager.storyExists(storyName)) {
       story = storyManager.readStory(storyName);
       storyChosen = true;
-      socket.emit('display', story.intro() );
+      socket.emit('display', story.default_context() );
       console.log("Client started story: " + storyName);
     }
   });

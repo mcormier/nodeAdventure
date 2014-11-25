@@ -31,32 +31,10 @@ function ROOMS() {
 }
 
 // -------------------------------------------------------------------------
-function Story() { this.state = common.createGameState(ROOMS(), "road"); }
-
-
-Story.prototype.intro = function () {
-  return "You are standing outside a lovely home in rural Nova Scotia \n \n"
-      +  "There are the following items here: \n Sign, Note\n \n"
-      +  "To the north you see a porch."
-};
-
-// Expects a struct like:
-// cmd.verb
-// cmd.target
-//
-// Returns a string response
-Story.prototype.process_command = function(cmd) {
-
-  if ( CMDS[cmd.verb] ) {
-    return CMDS[cmd.verb]( this.state, cmd.verb, cmd.target, CMDS );
-  } else {
-    return "Syntax error";
-  }
-
-}
 
 function create() {
-  return new Story();
+  var state = common.createGameState(ROOMS(), "road"); 
+  return common.createStory(state, CMDS);
 }
 
 exports.create = create;
