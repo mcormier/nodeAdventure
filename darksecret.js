@@ -1,28 +1,37 @@
 var common  = require('./commands.js');
 var CMDS = common.commands();
 
-var ROOMS = {
-  "road": {
-    "short": "Ouside a lovely home.",
-    "long": "You are standing outside a lovely home in rural Nova Scotia",
-    "exits": ["porch", null, null, null]
-  },
-  "porch": {
-    "short": "The front step.",
-    "long": "You are on the front step of the house."
-  }
-
-};
-
-
 // -------------------------------------------------------------------------
-function State() {
-  this.room_name = "road";
-  this.backpack = [];
+//  Items
+// -------------------------------------------------------------------------
+function Sign() { 
+  return { "name": function () { return "sign"; },
+           "verb_read": function () { return "Dark Secret Software Inc. Corporate Office. Go inside for contact information."; }
+         }
 }
 
 // -------------------------------------------------------------------------
-function Story() { this.state = new State(); }
+function ROOMS() {
+
+  return  {
+    "road": {
+      "short": "Ouside a lovely home.",
+      "long": "You are standing outside a lovely home in rural Nova Scotia",
+      "items": [ Sign() ],
+      "exits": ["porch", null, null, null]
+    },
+    "porch": {
+      "short": "The front step.",
+      "long": "You are on the front step of the house.",
+      "items": [],
+      "exits": [null, null, null, "road"]
+    }
+
+  };
+}
+
+// -------------------------------------------------------------------------
+function Story() { this.state = common.createGameState(ROOMS(), "road"); }
 
 
 Story.prototype.intro = function () {
