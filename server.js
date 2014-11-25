@@ -64,8 +64,11 @@ io.on('connection', function (socket) {
 
     try {
       var response = story.process_command(command);
-
-      socket.emit('errorMsg', response );
+      if ( response != null ) {
+        socket.emit('displayMessage', response );
+      } else {
+        socket.emit('display', story.default_context() );
+      }
     } catch (e) {
       socket.emit('errorMsg', e.message );
     }

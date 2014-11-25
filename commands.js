@@ -19,13 +19,40 @@ function read_item(state, verb, target_name, cmds) {
   return target.name() + " says '" + target.verb_read() + "'";
 }
 
+function move(state, verb, target_name, cmds) {
+  var cmd = verb.charAt(0);
+  var room = state.get_room();
+  if ( room.exits.length == 0 ) {
+    return "I can't go there";
+  }
+
+  var directions = ["n", "e", "w", "s" ];
+  var dir_index = directions.indexOf(cmd);
+
+  if (room.exits[dir_index] == null ) {
+    return "I don't see any exit in that direction.";
+  }
+
+  state.room_name = room.exits[dir_index];
+
+  return null;
+}
+
 
 // A default set of commands to use for a story.
 function commands() {
    return  {
     "help": help,
     "?": help,
-    "read": read_item
+    "read": read_item,
+    "north": move,
+    "south": move,
+    "west": move,
+    "east": move,
+    "n": move,
+    "s": move,
+    "w": move,
+    "e": move
   }
 }
 
@@ -89,11 +116,10 @@ Story.prototype.process_command = function(cmd) {
 Story.prototype.get_adjacent_rooms= function() {
   var adj_rooms = [];
   var room = this.state.get_room();
-  var exits = room["exits"];
   var dir = ["north", "east", "west", "south"];
-  for ( var i = 0; i < exits.length; i++ ) {
-    if (exits[i] != null ) {
-      adj_rooms.push( { direction: dir[i], name: exits[i] } );
+  for ( var i = 0; i < room.exits.length; i++ ) {
+    if (room.exits[i] != null ) {
+      adj_rooms.push( { direction: dir[i], name: room.exits[i] } );
     }
   }
 
