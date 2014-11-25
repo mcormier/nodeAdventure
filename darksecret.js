@@ -10,6 +10,12 @@ function Sign() {
          }
 }
 
+function Note() { 
+  return { name: function () { return "note"; },
+           verb_read: function () { return "Hello!"; }
+         }
+}
+
 // -------------------------------------------------------------------------
 function ROOMS() {
 
@@ -17,7 +23,7 @@ function ROOMS() {
     "road": {
       "short": "Ouside a lovely home.",
       "long": "You are standing outside a lovely home in rural Nova Scotia",
-      items: [ Sign() ],
+      items: [ Sign(), Note() ],
       "exits": ["porch", null, null, null]
     },
     "porch": {
