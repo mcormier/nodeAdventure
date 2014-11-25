@@ -8,13 +8,13 @@ function ROOMS() {
     "road": {
       "short": "Ouside on the street. ",
       "long": "You are Argyle street ona cold December night.",
-      "items": [ ],
+      items: [ ],
       "exits": [null, null, null, "diamond"]
     },
     "diamond": {
       "short": "The front step of the diamond.",
       "long": "You are on the front step of the diamond.",
-      "items": [],
+      items: [],
       "exits": ["road", null, null, null]
     }
 

@@ -42,8 +42,24 @@
     }
 
     socket.on('display', function(msg) {
+       console.log(msg);
        addBlankLIneToMonitor();
-       addTextToMonitor(msg);
+       addTextToMonitor(msg.description);
+
+       if ( msg.items.length > 0 ) { 
+         addBlankLIneToMonitor();
+         addTextToMonitor("The following items are here:");
+         addTextToMonitor(msg.items.join(", "));
+       }
+
+       if ( msg.exits.length > 0 ) { 
+         addBlankLIneToMonitor();
+         for ( var i = 0; i < msg.exits.length; i++ ) {
+           addTextToMonitor("To the " + msg.exits[i].direction +
+                            " you see a " + msg.exits[i].name + "." );
+         }
+       }
+ 
        scrollToBottom();
     });
 
@@ -105,8 +121,6 @@
     // Could push this into an editor class
     function captureKeyInput(e) {
       var input_elem = $("cmd_input");
-
-      console.log(e.keyCode);
 
       // Handle control characters first
       if (e.keyCode == 13 ) {

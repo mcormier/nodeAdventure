@@ -59,7 +59,7 @@ State.prototype.get_target = function(target_name) {
 }
 
 State.prototype.get_all_items = function() { 
-  return this.get_room()['items'];
+  return this.get_room().items;
 }
 
 
@@ -86,10 +86,33 @@ Story.prototype.process_command = function(cmd) {
 
 }
 
+Story.prototype.get_adjacent_rooms= function() {
+  var adj_rooms = [];
+  var room = this.state.get_room();
+  var exits = room["exits"];
+  var dir = ["north", "east", "west", "south"];
+  for ( var i = 0; i < exits.length; i++ ) {
+    if (exits[i] != null ) {
+      adj_rooms.push( { direction: dir[i], name: exits[i] } );
+    }
+  }
+
+ return adj_rooms;
+}
+
 Story.prototype.default_context = function() {
   var room = this.state.get_room();
+  var adj_rooms = this.get_adjacent_rooms();
 
-  return room["long"];
+  var items = []; 
+  for ( var i = 0; i < room.items.length; i++ ) {
+    items.push(room.items[i].name());
+  }
+
+
+  return { description: room["long"],
+           exits: adj_rooms, 
+           items: items };
 }
 
 

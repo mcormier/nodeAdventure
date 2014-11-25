@@ -61,8 +61,6 @@ io.on('connection', function (socket) {
     }
 
     command = parse_command(request); 
-    console.log("verb: " + command.verb );
-    console.log("target: " + command.target );
 
     try {
       var response = story.process_command(command);
