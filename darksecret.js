@@ -21,14 +21,14 @@ function ROOMS() {
 
   return  {
     "road": {
-      "short": "Ouside a lovely home.",
-      "long": "You are standing outside a lovely home in rural Nova Scotia",
+      short: "Ouside a lovely home.",
+      long: "You are standing outside a lovely home in rural Nova Scotia",
       items: [ Sign(), Note() ],
       exits: ["porch", null, null, null]
     },
     "porch": {
-      "short": "The front step.",
-      "long": "You are on the front step of the house.",
+      short: "The front step.",
+      long: "You are on the front step of the house.",
       items: [],
       exits: [null, null, null, "road"]
     }

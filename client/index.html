@@ -46,7 +46,12 @@
        addBlankLIneToMonitor();
        addTextToMonitor(msg.description);
 
-       if ( msg.items.length > 0 ) { 
+       if ( msg.items.length == 1 ) { 
+         addBlankLIneToMonitor();
+         addTextToMonitor("There is a " + msg.items[0] + " here" );
+       }
+
+       if ( msg.items.length > 1 ) { 
          addBlankLIneToMonitor();
          addTextToMonitor("The following items are here:");
          addTextToMonitor(msg.items.join(", "));
@@ -55,8 +60,16 @@
        if ( msg.exits.length > 0 ) { 
          addBlankLIneToMonitor();
          for ( var i = 0; i < msg.exits.length; i++ ) {
+           var name = msg.exits[i].name;
+           var join_word = " a";
+           // Hack to support one word location  in darksecret versus CATSS
+           // versus longer descriptions with the
+           if ( name.toLowerCase().indexOf('the') == 0 ) {
+             join_word = "";
+           } 
+
            addTextToMonitor("To the " + msg.exits[i].direction +
-                            " you see a " + msg.exits[i].name + "." );
+                              " you see " + join_word + name + "." );
          }
        }
  
@@ -81,8 +94,8 @@
        console.log("Received story list " + storyList);
        // This is a simple client that ignores the storyList and always asks
        // for CATSS
-       //socket.emit('chooseStory', 'CATSS'); 
-       socket.emit('chooseStory', 'DarkSecret'); 
+       socket.emit('chooseStory', 'CATSS'); 
+       //socket.emit('chooseStory', 'DarkSecret'); 
     });
 
     // HTML Display 

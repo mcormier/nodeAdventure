@@ -19,11 +19,17 @@ function read_item(state, verb, target_name, cmds) {
   return target.name() + " says '" + target.verb_read() + "'";
 }
 
+function do_open(state, verb, target_name, cmds) {
+  var target = state.get_target(target_name);
+  check_verb(target,"open");
+  return target.verb_open(state);
+}
+
 function look(state, verb, target_name, cmds) {
   if ( target_name == undefined ) {
     return null;
   }
-  return "stub";
+  return "TODO - stub";
 }
 
 function move(state, verb, target_name, cmds) {
@@ -60,7 +66,8 @@ function commands() {
     "s": move,
     "w": move,
     "e": move,
-    "look": look
+    "look": look,
+    "open": do_open
   }
 }
 
@@ -144,7 +151,7 @@ Story.prototype.default_context = function() {
   }
 
 
-  return { description: room["long"],
+  return { description: room.long,
            exits: adj_rooms, 
            items: items };
 }
