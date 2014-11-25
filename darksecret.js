@@ -5,8 +5,8 @@ var CMDS = common.commands();
 //  Items
 // -------------------------------------------------------------------------
 function Sign() { 
-  return { "name": function () { return "sign"; },
-           "verb_read": function () { return "Dark Secret Software Inc. Corporate Office. Go inside for contact information."; }
+  return { name: function () { return "sign"; },
+           verb_read: function () { return "Dark Secret Software Inc. Corporate Office. Go inside for contact information."; }
          }
 }
 

@@ -16,7 +16,7 @@ function check_verb(item, verb_name) {
 function read_item(state, verb, target_name, cmds) {
   var target = state.get_target(target_name);
   check_verb(target,"read");
-  return target["name"]() + " says '" + target["verb_read"]() + "'";
+  return target.name() + " says '" + target.verb_read() + "'";
 }
 
 
@@ -52,7 +52,7 @@ State.prototype.get_room = function(room_name) {
 State.prototype.get_target = function(target_name) { 
   var items = this.get_all_items();
   for ( var i = 0; i < items.length; i++) {
-    if ( target_name == items[i]["name"]() ) {
+    if ( target_name == items[i].name() ) {
       return items[i];
     }
   }
