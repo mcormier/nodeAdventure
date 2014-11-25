@@ -19,6 +19,13 @@ function read_item(state, verb, target_name, cmds) {
   return target.name() + " says '" + target.verb_read() + "'";
 }
 
+function look(state, verb, target_name, cmds) {
+  if ( target_name == undefined ) {
+    return null;
+  }
+  return "stub";
+}
+
 function move(state, verb, target_name, cmds) {
   var cmd = verb.charAt(0);
   var room = state.get_room();
@@ -52,7 +59,8 @@ function commands() {
     "n": move,
     "s": move,
     "w": move,
-    "e": move
+    "e": move,
+    "look": look
   }
 }
 
