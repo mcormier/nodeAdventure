@@ -29,7 +29,10 @@ function look(state, verb, target_name, cmds) {
   if ( target_name == undefined ) {
     return null;
   }
-  return "TODO - stub";
+
+  var target = state.get_target(target_name);
+  check_verb(target,"look");
+  return target.verb_look(state);
 }
 
 function move(state, verb, target_name, cmds) {

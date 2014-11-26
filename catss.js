@@ -6,11 +6,25 @@ var CMDS = common.commands();
 // -------------------------------------------------------------------------
 function DiamondDoor() { 
   return { name: function () { return "door"; },
-           verb_open: function (state) { return 
-              "The door is locked! It looks like a group of girls was cold so "
-             +"they locked the it. One of them glares at you." ; }
+           verb_look: function (state) { 
+             return "You see someone familiar through the door window."; },
+           verb_open: function (state) { 
+             return "The door is locked! It looks like a group of women were cold so "
+                  + "they locked it. One of them glares at you." ; }
          }
 }
+
+function BackstageDoor() { 
+  return { name: function () { return "door"; },
+           verb_look: function (state) { 
+             return "A set of double doors, you hear jovial laughter inside."; },
+           verb_open: function (state) { 
+             return "You open the door but there is a large crowd of people clustered near it. "
+                  + "Someone that could be on America's biggest loser is preventing you from " 
+                  + "opening it all the way" ; }
+         }
+}
+
 
 
 // -------------------------------------------------------------------------
@@ -22,19 +36,31 @@ function ROOMS() {
       short: "The street",
       long: "You are Argyle street on a cold December night.",
       items: [ ],
-      exits: [null, null, null, "diamond"]
+      exits: ["shoe_out", "backstage_out", null, "diamond_out"]
     },
-    "diamond": {
-      short: "The front step of the diamond",
+    "diamond_out": {
+      short: "The Diamond Bar",
       long: "You are on the front step of the diamond.",
       items: [ DiamondDoor() ],
       exits: ["road", null, null, null]
+    },
+    "backstage_out": {
+      short: "The Backstage Bar",
+      long: "You are on the front step of the Backstage Bar.",
+      items: [ BackstageDoor() ],
+      exits: [null, null, "road", null]
+    },
+    "shoe_out": {
+      short: "The Economy Shoe Shop",
+      long: "You are on the front step of the Economy Shoe Shop .",
+      items: [ ],
+      exits: [null, null, null, "road" ]
     }
+
 
   };
 }
 
-//  "To the east is the door to the Backstage Bar \n"
 //  "To the north is the door to the Economy Shoe Shop";
 
 function default_context() {
