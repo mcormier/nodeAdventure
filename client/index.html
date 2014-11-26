@@ -61,7 +61,7 @@
          addBlankLIneToMonitor();
          for ( var i = 0; i < msg.exits.length; i++ ) {
            var name = msg.exits[i].name;
-           var join_word = " a";
+           var join_word = " a ";
            // Hack to support one word location  in darksecret versus CATSS
            // versus longer descriptions with the
            if ( name.toLowerCase().indexOf('the') == 0 ) {
@@ -94,8 +94,8 @@
        console.log("Received story list " + storyList);
        // This is a simple client that ignores the storyList and always asks
        // for CATSS
-       socket.emit('chooseStory', 'CATSS'); 
-       //socket.emit('chooseStory', 'DarkSecret'); 
+       //socket.emit('chooseStory', 'CATSS'); 
+       socket.emit('chooseStory', 'DarkSecret'); 
     });
 
     // HTML Display 
