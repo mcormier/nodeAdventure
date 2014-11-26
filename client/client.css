@@ -16,7 +16,7 @@ body { background: black; }
   margin-top: 50px; margin-left: 50px;
   width:  550px;
   height: 350px;
-  overflow-y: scroll;
+  overflow-y: hidden;
   overflow-x: hidden;
 
   font-family: Pixel, Courier;

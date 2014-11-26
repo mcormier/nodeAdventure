@@ -48,6 +48,13 @@ function move(state, verb, target_name, cmds) {
     return "I can't go there";
   }
 
+  // Supports "GO NORTH" but not "GO ROAD"
+  if (cmd = 'g') {
+    if ( target_name == undefined ) { return "I don't know where that is"; }
+    cmd = target_name.charAt(0);
+  } 
+
+
   var directions = ["n", "e", "w", "s" ];
   var dir_index = directions.indexOf(cmd);
 
@@ -71,6 +78,7 @@ function commands() {
     "south": move,
     "west": move,
     "east": move,
+    "go": move,
     "n": move,
     "s": move,
     "w": move,
