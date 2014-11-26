@@ -25,6 +25,21 @@ function BackstageDoor() {
          }
 }
 
+function ShoeShopDoor() { 
+  return { name: function () { return "door"; },
+           verb_look: function (state) { 
+             return "It's a door.  It's cold out here maybe you should go in."; },
+           verb_open: function (state) { 
+               if ( this.closed == false ) { return "The door is already open"; }
+               this.closed = false;
+               var room = state.get_room();
+               room.exits[1] = "shoe_inside";
+               return "The door opens effortlessly.";
+            },
+           closed: true
+         }
+}
+
 
 
 // -------------------------------------------------------------------------
@@ -53,9 +68,17 @@ function ROOMS() {
     "shoe_out": {
       short: "The Economy Shoe Shop",
       long: "You are on the front step of the Economy Shoe Shop .",
-      items: [ ],
+      items: [ ShoeShopDoor() ],
       exits: [null, null, null, "road" ]
+    },
+    "shoe_inside": {
+      short: "The Economy Shoe Shop",
+      long: "You are in the Economy Shoe Shop. People are chatting amongst themselves. " + 
+            "You don't see anyone you know here.",
+      items: [ ],
+      exits: [null, null, null, null ]
     }
+
 
 
   };
