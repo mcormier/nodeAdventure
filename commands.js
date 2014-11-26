@@ -48,8 +48,16 @@ function move(state, verb, target_name, cmds) {
     return "I can't go there";
   }
 
-  // Supports "GO NORTH" but not "GO ROAD"
   if (cmd = 'g') {
+    // Supports GO PORCH or GO WOOD SHED
+    for ( var i = 0; i < room.exits.length; i++ ) {
+       if ( room.exits[i] == target_name ) {
+         state.room_name = room.exits[i];
+         return null;
+       }
+    } 
+     
+    // Supports GO NORTH by falling through
     if ( target_name == undefined ) { return "I don't know where that is"; }
     cmd = target_name.charAt(0);
   } 

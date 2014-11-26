@@ -22,10 +22,13 @@ console.log("Stories loaded " + storyManager.stories() );
 
 function parse_command( request ) {
   var command = {};
-  var words = request.toLowerCase().split(' ');
+  var normalized = request.toLowerCase();
+  var words = normalized.split(' ');
+
   command.verb = words[0];
   if ( words.length > 1 ) {
-    command.target = words[1];
+    var start_target = normalized.indexOf(' ');
+    command.target = normalized.substring(start_target+1);
   }
 
   return command
