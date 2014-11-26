@@ -16,6 +16,33 @@ function Note() {
          }
 }
 
+function Door() { 
+  return { name: function () { return "door"; },
+           verb_look: function () { 
+             var state = this.closed ? "closed" : "open";
+             return "A large metal door, painted in a nice neutral color. " +
+                    "The door is currently " + state; },
+           verb_open: function (state) { 
+               if ( this.locked ) { return "The door is locked."; }
+               if ( this.closed == false ) { return "The door is already open"; }
+               this.closed = false;
+               var room = state.get_room();
+               room.exits[1] = "foyer";
+               return "The door opens effortlessly.";
+            },
+            verb_close: function (state) { 
+             if ( this.closed) { return "The door is already closed"; }
+             this.closed = true;
+             var room = state.get_room();
+             room.exits[1] = null;
+             return "The door slowly closes and clicks shut.";
+           },
+           locked: true,
+           closed: true
+         }
+}
+
+
 // -------------------------------------------------------------------------
 function ROOMS() {
 
@@ -29,7 +56,7 @@ function ROOMS() {
     "porch": {
       short: "The front step.",
       long: "You are on the front step of the house.",
-      items: [],
+      items: [ Door() ],
       exits: [null, null, "wood shed", "road"]
     },
     "foyer": {

@@ -28,7 +28,9 @@ function BackstageDoor() {
 function ShoeShopDoor() { 
   return { name: function () { return "door"; },
            verb_look: function (state) { 
-             return "It's a door.  It's cold out here maybe you should go in."; },
+             var state = this.closed ? "closed" : "open";
+             return "It's a door.  It's cold out here maybe you should go in." +
+                    "The door is currently " + state; },
            verb_open: function (state) { 
                if ( this.closed == false ) { return "The door is already open"; }
                this.closed = false;
@@ -56,7 +58,7 @@ function ROOMS() {
   return  {
     "road": {
       short: "The street",
-      long: "You are Argyle street on a cold December night.",
+      long: "You are on Argyle street on a cold December night.",
       items: [ ],
       exits: ["shoe_out", "backstage_out", null, "diamond_out"]
     },
