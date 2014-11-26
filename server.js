@@ -37,26 +37,31 @@ function parse_command( request ) {
 
 io.on('connection', function (socket) {
 
-  var storyChosen = false;
+  var storyName = null;
   var story = null;
+
+  function startStory() {
+    console.log("Client started story: " + storyName);
+    story = storyManager.readStory(storyName);
+    console.log("Client started story: " + storyName);
+  }
 
   // Give the client a list of stories to choose from
   socket.emit('stories', storyManager.stories() );
 
   // The client  chose a story
-  socket.on('chooseStory', function(storyName) {
+  socket.on('chooseStory', function(name) {
 
-    if (storyManager.storyExists(storyName)) {
-      story = storyManager.readStory(storyName);
-      storyChosen = true;
+    if (storyManager.storyExists(name)) {
+      storyName = name; 
+      startStory();
       socket.emit('display', story.default_context() );
-      console.log("Client started story: " + storyName);
     }
   });
 
   socket.on('command', function(request) {
 
-    if (storyChosen == false) {
+    if (storyName == null) {
       console.log("Can't send a command if no story chosen");
       socket.emit('errorMsg', 'ERROR - need to choose the story first. ' );
       socket.emit('errorMsg', 'Available stories ' + storyManager.stories() );
@@ -73,7 +78,12 @@ io.on('connection', function (socket) {
         socket.emit('display', story.default_context() );
       }
     } catch (e) {
-      socket.emit('errorMsg', e.message );
+      if (e.name == "StartOver" ) {
+        startStory();
+        socket.emit('displayMessage', "Game reset." );
+      } else {
+        socket.emit('errorMsg', e.message );
+      }
     }
   });
 

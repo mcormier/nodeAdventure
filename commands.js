@@ -19,6 +19,10 @@ function read_item(state, verb, target_name, cmds) {
   return target.name() + " says '" + target.verb_read() + "'";
 }
 
+function do_reset(state, verb, target_name, cmds) {
+  throw { name: "StartOver", message: "" }
+}
+
 function do_open(state, verb, target_name, cmds) {
   var target = state.get_target(target_name);
   check_verb(target,"open");
@@ -93,7 +97,8 @@ function commands() {
     "e": move,
     "look": look,
     "open": do_open,
-    "close": do_close
+    "close": do_close,
+    "reset": do_reset
   }
 }
 
