@@ -36,6 +36,13 @@ function ShoeShopDoor() {
                room.exits[1] = "shoe_inside";
                return "The door opens effortlessly.";
             },
+           verb_close: function (state) { 
+             if ( this.closed) { return "The door is already closed"; }
+             this.closed = true;
+             var room = state.get_room();
+             room.exits[1] = null;
+             return "The door slowly closes and clicks shut.";
+           },
            closed: true
          }
 }

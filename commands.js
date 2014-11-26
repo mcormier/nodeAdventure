@@ -25,6 +25,12 @@ function do_open(state, verb, target_name, cmds) {
   return target.verb_open(state);
 }
 
+function do_close(state, verb, target_name, cmds) {
+  var target = state.get_target(target_name);
+  check_verb(target,"close");
+  return target.verb_close(state);
+}
+
 function look(state, verb, target_name, cmds) {
   if ( target_name == undefined ) {
     return null;
@@ -70,7 +76,8 @@ function commands() {
     "w": move,
     "e": move,
     "look": look,
-    "open": do_open
+    "open": do_open,
+    "close": do_close
   }
 }
 
