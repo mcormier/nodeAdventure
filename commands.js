@@ -91,6 +91,12 @@ function move(state, verb, target_name, cmds) {
   return null;
 }
 
+function use(state, verb, target_name, cmds) {
+  var target = state.get_target(target_name);
+  check_verb(target,"use");
+  return target.verb_use(state);
+}
+
 function inventory(state, verb, target_name, cmds) {
   if ( state.backpack.length == 0 ) { return "You are not carrying anything."; }
 
@@ -121,6 +127,7 @@ function commands() {
     "open": do_open,
     "close": do_close,
     "reset": do_reset,
+    "use": use,
     "take": take,
     "i": inventory,
     "inventory": inventory
@@ -154,12 +161,20 @@ State.prototype.get_target = function(target_name) {
       return items[i];
     }
   }
+  console.log("TODO -- throw exception when requesting a non_existant target:" + target_name);
+  //throw { name: "NoSuchItem", message: "I don't see that item here" }
 }
 
-State.prototype.get_all_items = function() { return this.get_room().items; }
+State.prototype.get_item = function(target_name) { 
+  return this.get_target(target_name);
+}
+
+
+State.prototype.get_all_items = function() { 
+  return this.get_room().items.concat(this.backpack); 
+}
 
 State.prototype.add_to_backpack = function(target_name) { 
-  console.log("add to backpack: " + target_name);
   var current_room = this.get_room();
   var target = this.get_target(target_name);
   target.is_in_backpack = true;

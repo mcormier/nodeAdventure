@@ -19,6 +19,17 @@ function Note() {
 function Axe() { 
   return { name: function () { return "axe"; },
            verb_look: function () { return "A sharp splitting axe."; },
+           verb_use: function (state) { 
+               if ( state.room_name != "porch" ) {
+                 return "You check the axe with your fingernail.  It's very sharp.";
+               }
+               var room = state.get_room();
+               var door = state.get_item("door");
+               if ( door.locked ) {
+                 door.locked = false;
+                 return "You smash the lock on the door.  It shatters."
+               } 
+               return "Don't you think you've done enough already?"; },
            verb_take: true
          }
 }
