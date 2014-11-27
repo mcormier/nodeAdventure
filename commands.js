@@ -172,7 +172,8 @@ State.prototype.get_target = function(target_name) {
       return items[i];
     }
   }
-  console.log("TODO -- throw exception when requesting a non_existant target:" + target_name);
+
+  //console.log("TODO -- throw exception when requesting a non_existant target:" + target_name);
   //throw { name: "NoSuchItem", message: "I don't see that item here" }
 }
 

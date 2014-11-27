@@ -34,6 +34,31 @@ function Axe() {
          }
 }
 
+function Computer() { 
+  return { name: function () { return "computer"; },
+           verb_look: function () { 
+              var status = "";
+              if (this.locked) { status = "The computer appears to be locked." }
+
+              return "A desktop computer which seems to be running Ubuntu. "+
+                     "It has a USB port on the front. " + status; },
+           verb_use: function (state) { 
+              if (this.locked) { return "It's locked."; }
+
+               return "You tap a few keys on the keyboard. The computer responds with <br/>"+
+"----------<br/>"+
+"Congratulations!<br/>"+
+"Send me an email! <a target='_blank' href='mailto:game@darksecretsoftware.com'>game@darksecretsoftware.com</a></br>"+
+"Follow me on Twitter: <a target='_blank' href='http://twitter.com/#!/TheSandyWalsh'>@TheSandyWalsh</a><br/>"+
+"Read my blog: <a target='_blank' href='http://sandywalsh.com'>www.SandyWalsh.com</a><br/>"+
+"Look at <a target='_blank' href='https://github.com/mcormier/nodeAdventure'>the source code for this site.</a>"; 
+           },
+
+           locked: true
+         }
+}
+
+
 
 function Door() { 
   return { name: function () { return "door"; },
@@ -81,7 +106,7 @@ function ROOMS() {
     "foyer": {
       short: "The foyer of the house.",
       long: "You are in the tastefully decorated foyer of the house.",
-      items: [],
+      items: [ Computer() ],
       exits: [null, null, null, "porch"]
     },
     "wood shed": {
