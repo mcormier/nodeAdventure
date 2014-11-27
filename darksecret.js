@@ -93,9 +93,30 @@ function Door() {
          }
 }
 
+function ZiplineTether() { 
+  return { name: function () { return "tether"; },
+           verb_look: function () { return "A sturdy rope attached to a pulley on the zipline."; },
+           verb_use: function (state) { 
+               var last_room_name = state.room_name;
+               switch (last_room_name) {
+                 case 'trampoline':
+                    state.room_name = 'garden';
+                    break;
+                 case 'garden':
+                    state.room_name = 'trampoline';
+                    break;
+               }
+
+               return "You sail along the zipline to the other side of the yard, avoiding the mud."; }
+         }
+}
+
+
 
 // -------------------------------------------------------------------------
 function ROOMS() {
+
+  var tether = ZiplineTether();
 
   return  {
     "road": {
@@ -126,7 +147,7 @@ function ROOMS() {
       short: "In the backyard by the trampoline.",
       long: "In the NW corner of the backyard by the trampoline. A zipline runs East "
            +"to the NE corner of the backyard.",
-      items: [ Trampoline() ],
+      items: [ Trampoline(), tether ],
       exits: [null, "muddy yard", null, "wood shed"]
     },
     "muddy yard": {
@@ -139,7 +160,7 @@ function ROOMS() {
       short: "In a small garden in the backyard.",
       long: "In the NE corner of the backyard. There is a lovely vegetable garden here."+
             " A zipline runs West to the NW corner of the backyard.",
-      items: [],
+      items: [ tether ],
       exits: [null, null, null, null ]
     }
   };
