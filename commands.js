@@ -36,11 +36,10 @@ function do_close(state, verb, target_name, cmds) {
 }
 
 function look(state, verb, target_name, cmds) {
-  if ( target_name == null) {
-    return null;
-  }
-
+  if ( target_name == null || target_name == undefined) { return null; }
   var target = state.get_target(target_name);
+  if (  target == undefined) { return null; }
+  
   check_verb(target,"look");
   return target.verb_look(state);
 }
@@ -91,6 +90,17 @@ function move(state, verb, target_name, cmds) {
   return null;
 }
 
+function drop(state, verb, target_name, cmds) {
+  var target = state.get_from_backpack(target_name);
+  if ( target.verb_take == undefined ) { return "You can't drop that."; }
+
+  state.remove_from_backpack(target_name);
+
+  var room = state.get_room();
+  room.items.push(target);
+  return "You drop the " + target_name + ".";
+}
+
 function use(state, verb, target_name, cmds) {
   var target = state.get_target(target_name);
   check_verb(target,"use");
@@ -129,6 +139,7 @@ function commands() {
     "reset": do_reset,
     "use": use,
     "take": take,
+    "drop": drop,
     "i": inventory,
     "inventory": inventory
   }
@@ -170,6 +181,29 @@ State.prototype.get_item = function(target_name) {
 }
 
 
+State.prototype.remove_from_backpack = function(target_name) { 
+  for (var i = 0; i < this.backpack.length; i++) {
+    if ( this.backpack[i].name() == target_name ) {
+      return this.backpack.pop(this.backpack[i]);
+    }
+  }
+}
+
+State.prototype.get_from_backpack = function(target_name) { 
+  if (target_name == undefined ) { 
+    throw { name: "NotInBackpack", message: "You don't have that item in your backpack." }
+  }
+
+  for (var i = 0; i < this.backpack.length; i++) {
+    var temp = this.backpack[i];
+    if ( target_name == this.backpack[i].name() ) {
+      return this.backpack[i];
+    }
+  }
+
+  throw { name: "NotInBackpack", message: "You don't have that item in your backpack." }
+}
+
 State.prototype.get_all_items = function() { 
   return this.get_room().items.concat(this.backpack); 
 }
@@ -187,7 +221,7 @@ State.prototype.remove_item = function(target_name) {
   var items = this.get_all_items();
   for ( var i = 0; i < items.length; i++) {
     if ( target_name == items[i].name() ) {
-      items.pop(items[i]);
+      this.get_room().items.pop(items[i]);
       return; 
     }
   }

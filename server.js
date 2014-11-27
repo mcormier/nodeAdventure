@@ -29,6 +29,8 @@ function parse_command( request ) {
   if ( words.length > 1 ) {
     var start_target = normalized.indexOf(' ');
     command.target = normalized.substring(start_target+1);
+  } else {
+    command.target = "";
   }
 
   return command
@@ -82,6 +84,7 @@ io.on('connection', function (socket) {
         startStory();
         socket.emit('displayMessage', "Game reset." );
       } else {
+        console.log(e.stack)
         socket.emit('errorMsg', e.message );
       }
     }
