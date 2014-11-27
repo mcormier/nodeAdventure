@@ -58,6 +58,13 @@ function Computer() {
          }
 }
 
+function Trampoline() { 
+  return { name: function () { return "trampoline"; },
+           verb_look: function () { return "A large oval trampoline surrounded by a large net."; },
+           verb_use: function (state) { return "Wee! You bounce up and down on the trampoline. It's fun."; }
+         }
+}
+
 
 
 function Door() { 
@@ -119,7 +126,7 @@ function ROOMS() {
       short: "In the backyard by the trampoline.",
       long: "In the NW corner of the backyard by the trampoline. A zipline runs East "
            +"to the NE corner of the backyard.",
-      items: [],
+      items: [ Trampoline() ],
       exits: [null, "muddy yard", null, "wood shed"]
     },
     "muddy yard": {
