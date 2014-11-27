@@ -52,7 +52,7 @@ function move(state, verb, target_name, cmds) {
     return "I can't go there";
   }
 
-  if (cmd = 'g') {
+  if (cmd == 'g') {
     // Supports GO PORCH or GO WOOD SHED
     for ( var i = 0; i < room.exits.length; i++ ) {
        if ( room.exits[i] == target_name ) {
@@ -66,9 +66,9 @@ function move(state, verb, target_name, cmds) {
     cmd = target_name.charAt(0);
   } 
 
-
   var directions = ["n", "e", "w", "s" ];
   var dir_index = directions.indexOf(cmd);
+
 
   if (room.exits[dir_index] == null ) {
     return "I don't see any exit in that direction.";
@@ -150,7 +150,7 @@ function Story(state, cmds) {
 }
 
 Story.prototype.process_command = function(cmd) {
-
+  console.log("Processing command " + cmd.verb + " target " + cmd.target );
   if ( this.cmds[cmd.verb] ) {
     return this.cmds[cmd.verb]( this.state, cmd.verb, cmd.target, this.cmds );
   } else {

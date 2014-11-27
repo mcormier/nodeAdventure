@@ -16,6 +16,13 @@ function Note() {
          }
 }
 
+function Axe() { 
+  return { name: function () { return "axe"; },
+           verb_look: function () { return "A sharp splitting axe."; }
+         }
+}
+
+
 function Door() { 
   return { name: function () { return "door"; },
            verb_look: function () { 
@@ -68,7 +75,7 @@ function ROOMS() {
     "wood shed": {
       short: "A wood shed",
       long: "Your are at the SW corner of the house, near the wood shed.",
-      items: [],
+      items: [ Axe() ],
       exits: ["trampoline", "porch", null, null]
     },
     "trampoline": {
