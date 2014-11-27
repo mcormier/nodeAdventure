@@ -91,6 +91,16 @@ function move(state, verb, target_name, cmds) {
   return null;
 }
 
+function inventory(state, verb, target_name, cmds) {
+  if ( state.backpack.length == 0 ) { return "You are not carrying anything."; }
+
+  var names = [];
+  for ( var i = 0; i < state.backpack.length; i++ ) {
+    names.push( state.backpack[i].name() );
+  }
+
+  return "You are carrying: " + names.sort().join(",");
+}
 
 // A default set of commands to use for a story.
 function commands() {
@@ -111,7 +121,9 @@ function commands() {
     "open": do_open,
     "close": do_close,
     "reset": do_reset,
-    "take": take
+    "take": take,
+    "i": inventory,
+    "inventory": inventory
   }
 }
 
