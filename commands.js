@@ -36,13 +36,25 @@ function do_close(state, verb, target_name, cmds) {
 }
 
 function look(state, verb, target_name, cmds) {
-  if ( target_name == undefined ) {
+  if ( target_name == null) {
     return null;
   }
 
   var target = state.get_target(target_name);
   check_verb(target,"look");
   return target.verb_look(state);
+}
+
+function take(state, verb, target_name, cmds) {
+  var target = state.get_target(target_name);
+  if ( target == undefined ) { return "I don't see that item here"; }
+
+  if ( target.verb_take == undefined ) {
+    return "You can't take that.";
+  }
+
+  state.add_to_backpack(target_name);
+  return "You put the " + target.name() + " in your backpack." 
 }
 
 function move(state, verb, target_name, cmds) {
@@ -98,7 +110,8 @@ function commands() {
     "look": look,
     "open": do_open,
     "close": do_close,
-    "reset": do_reset
+    "reset": do_reset,
+    "take": take
   }
 }
 
@@ -131,10 +144,27 @@ State.prototype.get_target = function(target_name) {
   }
 }
 
-State.prototype.get_all_items = function() { 
-  return this.get_room().items;
+State.prototype.get_all_items = function() { return this.get_room().items; }
+
+State.prototype.add_to_backpack = function(target_name) { 
+  console.log("add to backpack: " + target_name);
+  var current_room = this.get_room();
+  var target = this.get_target(target_name);
+  target.is_in_backpack = true;
+  this.backpack.push(target);
+
+  this.remove_item(target_name);
 }
 
+State.prototype.remove_item = function(target_name) { 
+  var items = this.get_all_items();
+  for ( var i = 0; i < items.length; i++) {
+    if ( target_name == items[i].name() ) {
+      items.pop(items[i]);
+      return; 
+    }
+  }
+}
 
 function createState(rooms, room_name) {
   return new State(rooms, room_name);
@@ -150,7 +180,6 @@ function Story(state, cmds) {
 }
 
 Story.prototype.process_command = function(cmd) {
-  console.log("Processing command " + cmd.verb + " target " + cmd.target );
   if ( this.cmds[cmd.verb] ) {
     return this.cmds[cmd.verb]( this.state, cmd.verb, cmd.target, this.cmds );
   } else {

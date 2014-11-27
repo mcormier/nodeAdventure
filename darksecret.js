@@ -18,7 +18,8 @@ function Note() {
 
 function Axe() { 
   return { name: function () { return "axe"; },
-           verb_look: function () { return "A sharp splitting axe."; }
+           verb_look: function () { return "A sharp splitting axe."; },
+           verb_take: true
          }
 }
 
