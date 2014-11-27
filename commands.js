@@ -190,10 +190,6 @@ State.prototype.remove_from_backpack = function(target_name) {
 }
 
 State.prototype.get_from_backpack = function(target_name) { 
-  if (target_name == undefined ) { 
-    throw { name: "NotInBackpack", message: "You don't have that item in your backpack." }
-  }
-
   for (var i = 0; i < this.backpack.length; i++) {
     var temp = this.backpack[i];
     if ( target_name == this.backpack[i].name() ) {
