@@ -215,10 +215,11 @@ State.prototype.add_to_backpack = function(target_name) {
 }
 
 State.prototype.remove_item = function(target_name) { 
-  var items = this.get_all_items();
+  var items = this.get_room().items;
   for ( var i = 0; i < items.length; i++) {
     if ( target_name == items[i].name() ) {
-      this.get_room().items.pop(items[i]);
+      //items.pop(items[i]);
+      items.splice(i,1);
       return; 
     }
   }

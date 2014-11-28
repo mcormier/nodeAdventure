@@ -111,6 +111,25 @@ function ZiplineTether() {
          }
 }
 
+function Key() { 
+  return { name: function () { return "key"; },
+           verb_look: function () { return "The key has a USB connector and 'DSS' engraved on the side."; },
+           verb_use: function (state) { 
+               if ( state.room_name != 'foyer') {
+                 return "There's nowhere to plug it in.";
+               } 
+               var room = state.get_room();
+               var computer = room.get_item("computer");
+               if ( computer.locked ) {
+                 computer.locked = false;
+                 return "You slied the key into the USB slot of the PC.  The PC springs to life.";
+               }
+
+               return "Nothing happens."; },
+           verb_take: true
+         }
+}
+
 
 
 // -------------------------------------------------------------------------
@@ -160,7 +179,7 @@ function ROOMS() {
       short: "In a small garden in the backyard.",
       long: "In the NE corner of the backyard. There is a lovely vegetable garden here."+
             " A zipline runs West to the NW corner of the backyard.",
-      items: [ tether ],
+      items: [ Key(), tether ],
       exits: [null, null, null, null ]
     }
   };
