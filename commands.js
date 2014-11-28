@@ -13,6 +13,8 @@ function check_verb(item, verb_name) {
   throw { name: "CantDoThat", message: "I don't see that item here" }
 }
 
+exports.check_verb = check_verb;
+
 function read_item(state, verb, target_name, cmds) {
   var target = state.get_target(target_name);
   check_verb(target,"read");

@@ -1,5 +1,19 @@
 var common  = require('./commands.js');
+
+function talk(state, verb, target_name, cmds) {
+
+  if ( target_name.trim()  == "" ) { return "You mutter to yourself."; }
+
+  var target = state.get_target(target_name);
+  common.check_verb(target, "talk");
+  return target.verb_talk(state);;
+}
+
+
 var CMDS = common.commands();
+// Add a custom command for this game.
+CMDS.talk = talk;
+
 
 // -------------------------------------------------------------------------
 //  Items
@@ -99,6 +113,15 @@ function PackOfCigs() {
          }
 }
 
+function Bartender() { 
+  return { name: function () { return "bartender"; },
+           verb_look: function (state) { 
+             return "The bartender has lots of piercing's. She's pretty busy dealing with patrons." ; },
+           verb_talk: function (state) { 
+             return "Pekza who? I have no idea what you're talking about." ; }
+         }
+}
+
 
 
 
@@ -135,7 +158,7 @@ function ROOMS() {
       short: "The Economy Shoe Shop",
       long: "You are in the Economy Shoe Shop. People are chatting amongst themselves. " + 
             "You don't see anyone you know here.",
-      items: [ ],
+      items: [ Bartender() ],
       exits: [null, null, null, null ]
     }
 
@@ -163,7 +186,7 @@ function get_adjacent_rooms() {
 // -------------------------------------------------------------------------
 
 function create() {
-  var state = common.createGameState(ROOMS(), "road"); 
+  var state = common.createGameState(ROOMS(), "shoe_inside"); 
   var story =  common.createStory(state, CMDS);
 
   // Override the default behaviour
