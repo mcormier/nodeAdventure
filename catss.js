@@ -9,8 +9,21 @@ function DiamondDoor() {
            verb_look: function (state) { 
              return "You see someone familiar through the door window."; },
            verb_open: function (state) { 
+             if ( this.trash_added == false ) {
+               var road = state.get_room("road");
+               road.items.push(Trash());
+             }
+
+             this.open_count++;
+             var extra_str = "One of them glares at you.";
+             if ( this.open_count % 2 == 0 ) {
+               extra_str = "One of them flips you the bird.";
+             }
+
              return "The door is locked! It looks like a group of women were cold so "
-                  + "they locked it. One of them glares at you." ; }
+                  + "they locked it. "+ extra_str ; },
+           open_count: 0,
+           trash_added: false
          }
 }
 
@@ -48,6 +61,44 @@ function ShoeShopDoor() {
            closed: true
          }
 }
+
+function Trash() { 
+  return { name: function () { return "trash"; },
+           verb_look: function (state) { 
+             state.get_room().items.pop(this);
+             state.get_room().items.push(FrankMagazine());
+             state.get_room().items.push(SodaCan());
+             state.get_room().items.push(PackOfCigs());
+             return "You look closely at the trash and see a crushed soda can, a discarded frank "+
+                    "magazine and a pack of cigarettes"; },
+           
+         }
+}
+
+function FrankMagazine() { 
+  return { name: function () { return "magazine"; },
+           verb_look: function (state) { 
+             return "TODO" ; },
+           verb_take: true
+         }
+}
+
+function SodaCan() { 
+  return { name: function () { return "soda can"; },
+           verb_look: function (state) { 
+             return "TODO" ; },
+           verb_take: true
+         }
+}
+
+function PackOfCigs() { 
+  return { name: function () { return "cigarette pack"; },
+           verb_look: function (state) { 
+             return "TODO" ; },
+           verb_take: true
+         }
+}
+
 
 
 
@@ -92,24 +143,6 @@ function ROOMS() {
 
   };
 }
-
-//  "To the north is the door to the Economy Shoe Shop";
-
-function default_context() {
-  var room = this.state.get_room();
-  var adj_rooms = this.get_adjacent_rooms();
-    
-  var items = [];
-  for ( var i = 0; i < room.items.length; i++ ) {
-    items.push(room.items[i].name());
-  } 
-
-  console.log("TODO");    
-    
-  return { description: room.long,
-           exits: adj_rooms,
-           items: items };
-}   
 
 
 function get_adjacent_rooms() {
