@@ -1,0 +1,217 @@
+<html>
+<head>
+  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+  <script src="http://mcormier.github.io/js/PPUtils-1.0.0.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="client.css">
+</head>
+<body>
+<!-- http://www.network-science.de/ascii/ -->
+  <div id="narrative">
+    <div id="workarea">
+
+      <div class="startScreen">
+<pre>
+_________     _________________________ _________
+\_   ___ \   /  _  \__    ___/   _____//   _____/
+/    \  \/  /  /_\  \|    |  \_____  \ \_____  \ 
+\     \____/    |    \    |  /        \/        \
+ \______  /\____|__  /____| /_______  /_______  /
+        \/         \/               \/        \/ 
+    _/\/\/\/\/\______/\/\/\/\______/\/\______/\/\/\___
+   _________/\/\__/\/\____/\/\__/\/\/\____/\/\/\/\___ 
+  ___/\/\/\/\____/\/\__/\/\/\____/\/\__/\/\__/\/\___  
+ _/\/\__________/\/\/\__/\/\____/\/\__/\/\/\/\/\/\_   
+_/\/\/\/\/\/\____/\/\/\/\______/\/\________/\/\___    
+</pre>
+      </div>
+
+      <div class="console">
+        <div id="cmd">
+          <div id="prompt"> &gt; </div>
+            <span id="cmd_input"></span>
+            <div id="cursor"></div>
+        </div>
+ 
+      </div>
+
+    </div>
+  </div>
+ <div class="msgBoard" style="position:absolute; top:1300px">
+  <a href="http://martha.coleharbour.ca">
+    <img src="http://www.coleharbour.ca/splash.jpg" width="100%">
+  </a>
+  </div>
+  <script>
+
+    var local = false;
+    var cursorAnim;
+    var command_string = "";
+
+    // Web Socket Communication
+    // -------------------------------------------------------------------------------------
+    var socket;
+    if (local) {
+     socket  = io.connect('http://127.0.0.1:8080');
+     console.log("Running in local test mode");
+    } else  {
+      socket = io.connect('http://nodejs-catts.rhcloud.com:8000');
+    }
+
+    socket.on('display', function(msg) {
+       console.log(msg);
+       addBlankLIneToMonitor();
+       addTextToMonitor(msg.description);
+
+       if ( msg.items.length == 1 ) { 
+         addBlankLIneToMonitor();
+         addTextToMonitor("There is a " + msg.items[0] + " here" );
+       }
+
+       if ( msg.items.length > 1 ) { 
+         addBlankLIneToMonitor();
+         addTextToMonitor("The following items are here:");
+         addTextToMonitor(msg.items.join(", "));
+       }
+
+       if ( msg.exits.length > 0 ) { 
+         addBlankLIneToMonitor();
+         for ( var i = 0; i < msg.exits.length; i++ ) {
+           var name = msg.exits[i].name;
+           var join_word = " a ";
+           // Hack to support one word location  in darksecret versus CATSS
+           // versus longer descriptions with the
+           if ( name.toLowerCase().indexOf('the') == 0 ) {
+             join_word = "";
+           } 
+
+           addTextToMonitor("To the " + msg.exits[i].direction +
+                              " you see " + join_word + name + "." );
+         }
+       }
+ 
+       scrollToBottom();
+    });
+
+    socket.on('errorMsg', function(msg) {
+       addBlankLIneToMonitor();
+       addTextToMonitor(msg);
+       scrollToBottom();
+    });
+
+    socket.on('displayMessage', function(msg) {
+       addBlankLIneToMonitor();
+       addTextToMonitor(msg);
+       scrollToBottom();
+    });
+
+
+    // StoryList returned is an array
+    socket.on('stories', function (storyList) {
+       console.log("Received story list " + storyList);
+       // This is a simple client that ignores the storyList and always asks
+       // for CATSS
+       socket.emit('chooseStory', 'CATSS'); 
+       //socket.emit('chooseStory', 'DarkSecret'); 
+    });
+
+    // HTML Display 
+    // -------------------------------------------------------------------------------------
+    function htmlForString(command) { return command.replace(/ /g, "&nbsp;"); }
+    function addBlankLIneToMonitor() { addDivWithText('&nbsp;'); }
+
+    function addDivWithText(msg) {
+       var display = $("workarea");
+       var div = document.createElement("div");
+       div.className = "text_response";
+
+       // Only convert blank lines or else word wrap won't work
+       if (!msg.replace(/\s/g, "").length) {
+         div.innerHTML = htmlForString(msg);
+       } else {
+         div.innerHTML = msg;
+       }
+       display.appendChild(div);
+    }
+
+    function addTextToMonitor(msg) {
+        var lines = msg.split("\n");
+        for (var i = 0; i < lines.length; i++ ) {
+          addDivWithText(lines[i]);
+        }
+    }
+
+    // Simple version for now
+    function scrollToBottom () {
+       var display = $("workarea");
+       display.scrollTop += display.scrollHeight;
+    }
+
+    // Keyboard input
+    // -------------------------------------------------------------------------------------
+    // Got the majority of the idea from here.  Doesn't support left and right key arrows
+    // which would make things a little more complicated.
+    //
+    // http://stackoverflow.com/questions/3758023/how-to-use-this-square-cursor-in-a-html-input-field
+    //
+    // Could push this into an editor class
+    function captureKeyInput(e) {
+      var input_elem = $("cmd_input");
+
+      // Handle control characters first
+      if (e.keyCode == 13 ) {
+        handleEnter(e);
+        return false;
+      }
+
+      // Handle deletes
+      if (e.keyCode == 8 ) { 
+        command_string = command_string.substring(0,command_string.length-1);
+        input_elem.innerHTML = htmlForString(command_string);
+        return false; 
+      }
+    
+      // Ignore other control characters, TAB, etc..
+      // but allow space
+      //if (  e.keyCode < 64  ||  e.keyCode != 32 ) { return; }
+
+      command_string = command_string + String.fromCharCode(e.keyCode);
+
+      input_elem.innerHTML = htmlForString(command_string);
+      return false;
+    }
+
+    function handleEnter(e) {
+      if (e.keyCode == 13 ) {
+        addBlankLIneToMonitor();
+        addTextToMonitor('> ' + command_string);
+        socket.emit('command', command_string);
+        $("cmd_input").innerHTML='';
+        command_string = '';
+      }
+    }
+
+
+    // Cursor animation toggler
+    // -------------------------------------------------------------------------------------
+    function toggleCursorVisibility() {
+      var elem = $('cursor');
+      var opacity = elem.style.opacity;
+      if ( opacity == 1 ) {
+        elem.style.opacity = 0;
+      } else {
+        elem.style.opacity = 1;
+      }
+    }
+
+
+
+
+    document.onkeypress=captureKeyInput
+    cursoAnim =  window.setInterval( toggleCursorVisibility, 600);
+
+  </script>
+
+
+</body>
+</html>
