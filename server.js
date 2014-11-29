@@ -41,9 +41,9 @@ io.on('connection', function (socket) {
 
   var storyName = null;
   var story = null;
+  console.log("New connection from " + socket.request.connection.remoteAddress );
 
   function startStory() {
-    console.log("Client started story: " + storyName);
     story = storyManager.readStory(storyName);
     console.log("Client started story: " + storyName);
   }

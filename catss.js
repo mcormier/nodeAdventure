@@ -21,11 +21,12 @@ CMDS.talk = talk;
 function DiamondDoor() { 
   return { name: function () { return "door"; },
            verb_look: function (state) { 
-             return "You see someone familiar through the door window."; },
+             return "You see someone familiar through the door window, near the back of the bar. Unfortunately they don't see you."; },
            verb_open: function (state) { 
              if ( this.trash_added == false ) {
                var road = state.get_room("road");
                road.items.push(Trash());
+               this.trash_added = true;
              }
 
              this.open_count++;
@@ -127,24 +128,48 @@ function PackOfCigs() {
 function Bartender() { 
   return { name: function () { return "bartender"; },
            verb_look: function (state) { 
-             return "The bartender has lots of piercing's. She's pretty busy dealing with patrons. "+
-                     "You get glance at her cleavage a second too long"; },
+             return "The bartender has lots of piercing's and she's pretty busy dealing with patrons. You glance at her cleavage a second to long"; },
            verb_talk: function (state) { 
              return "Pekza who? I have no idea what you're talking about." ; }
          }
 }
 
+function Bartender2() { 
+  return { name: function () { return "bartender"; },
+           verb_look: function (state) { 
+             return "The bartender is wearing a skinny tie."; },
+           verb_talk: function (state) { 
+             return "Gin and tonic? I don't know how to make that." ; }
+         }
+}
+
+
 
 function Dude() { 
   return { name: function () { return "dude"; },
+           dude_description: "He's a dude but not the dude you're looking for. He might be the bouncer as he's popping out of his T-shirt." ,
            verb_look: function (state) { 
-             return  "He's a dude but not the dude you're looking for. "+
-                     "He might be the bouncer as he's popping out of his T-shirt.  He's "+
-                     "blocking the hallway to the Backstage Bar and you notice nicotine stains on his fingers." ; },
+             if (state.room_name == "shoe_inside") {
+               return  this.dude_description + " He's blocking the hallway to the Backstage Bar and you notice nicotine stains on his fingers." ; 
+             } 
+             return this.dude_description;
+         },
            verb_talk: function (state) { 
-             return "The dude's a real chatty Cathy.  You try to ask him to move out of the way but "+
-                    "he thinks he knows you and starts telling you about how great he's been doing " +
-                    "on his new diet.  You can't get a word in edgewise." ; }
+             if (state.room_name == "shoe_inside") {
+               return "The dude's a real chatty Cathy.  You try to ask him to move out of the way but he thinks he knows you and starts telling you about how great he's been doing on his new diet.  You can't get a word in edgewise.";
+             }
+             return "You now know more than you ever wanted to know about proper bench press form.";
+           }
+         }
+}
+
+function DanceFloor() { 
+  return { name: function () { return "dance floor"; },
+           verb_look: function (state) { 
+             return "You see several people dancing.  It's not a dedicated dance floor, but a floor that just happens to have people dancing on it. Past the dancers you see the entrace to the diamond."; },
+           verb_use: function (state) { 
+             state.get_room().exits[3] = "diamond_inside";
+             return "You bring out your best dance moves, the microwave, the whirly burly, the jiggity-poo, culminating in your piece de resistance the swan which is so odd it completely clears the dance floor and opens a passage to the diamond." ; }
          }
 }
 
@@ -167,6 +192,12 @@ function ROOMS() {
       items: [ DiamondDoor() ],
       exits: ["road", null, null, null]
     },
+     "diamond_inside": {
+      short: "The Diamond Bar",
+      long: "You are inside the diamond. You've found your friends and settle down to a night of drinks and laughs.  Happy CATSS 2014. ",
+      items: [ ],
+      exits: ["backstage_inside", null, null, null]
+    },
     "backstage_out": {
       short: "The Backstage Bar",
       long: "You are on the front step of the Backstage Bar.",
@@ -175,13 +206,13 @@ function ROOMS() {
     },
      "backstage_inside": {
       short: "The Backstage Bar",
-      long: "You are in the Backstage Bar.",
-      items: [ ],
+      long: "You are in the Backstage Bar. You don't see anyone you know here but you hear uncontrollable laughter to the south that sounds very familiar.",
+      items: [ Bartender2(), DanceFloor() ],
       exits: ["hallway", null, null, null]
     },
     "shoe_out": {
       short: "The Economy Shoe Shop",
-      long: "You are on the front step of the Economy Shoe Shop .",
+      long: "You are on the front step of the Economy Shoe Shop.",
       items: [ ShoeShopDoor() ],
       exits: [null, null, null, "road" ]
     },
@@ -190,11 +221,11 @@ function ROOMS() {
       long: "You are in the Economy Shoe Shop. People are chatting amongst themselves. " + 
             "You don't see anyone you know here.",
       items: [ Bartender(), Dude() ],
-      exits: [null, null, null, null ]
+      exits: [null, null, "shoe_out", null ]
     },
     "hallway": {
       short: "A hallway",
-      long: "You are in hallway between the shoe and the backstage bar. ",
+      long: "You are in the hallway between the shoe and the backstage bar. Waiters and waitresses zip by you with freshly made nacho plates.",
       items: [  ],
       exits: ["shoe_inside", null, null, "backstage_inside"]
     }
@@ -205,7 +236,7 @@ function ROOMS() {
   };
 }
 
-
+// returns short description instead of name
 function get_adjacent_rooms() {
   var adj_rooms = [];
   var room = this.state.get_room();
@@ -224,11 +255,8 @@ function get_adjacent_rooms() {
 // -------------------------------------------------------------------------
 
 function create() {
-  var state = common.createGameState(ROOMS(), "shoe_inside"); 
-  state.backpack.push( PackOfCigs() );
-
-  var story =  common.createStory(state, CMDS);
-
+  var state = common.createGameState(ROOMS(), "road"); 
+  var story = common.createStory(state, CMDS);
   // Override the default behaviour
   story.get_adjacent_rooms = get_adjacent_rooms; 
   return story;
