@@ -9,10 +9,17 @@ function talk(state, verb, target_name, cmds) {
   return target.verb_talk(state);;
 }
 
+function read_item(state, verb, target_name, cmds) {
+  var target = state.get_target(target_name);
+  common.check_verb(target,"read");
+  return target.verb_read();
+}
+
 
 var CMDS = common.commands();
 // Add a custom command for this game.
 CMDS.talk = talk;
+CMDS.read = read_item;
 
 
 // -------------------------------------------------------------------------
@@ -82,7 +89,6 @@ function Trash() {
            verb_look: function (state) { 
              state.get_room().items.pop(this);
              state.get_room().items.push(FrankMagazine());
-             state.get_room().items.push(SodaCan());
              state.get_room().items.push(PackOfCigs());
              return "You look closely at the trash and see a crushed soda can, a discarded frank "+
                     "magazine and a pack of cigarettes"; },
@@ -92,19 +98,25 @@ function Trash() {
 
 function FrankMagazine() { 
   return { name: function () { return "magazine"; },
-           verb_look: function (state) { 
-             return "TODO" ; },
+           read_count: 0,
+           verb_look: function (state) { return "A recent copy of Frank Magazine." ; },
+           verb_read: function (state) { 
+             this.read_count++;
+             if ( this.read_count == 1 ) {
+               return "You peruse an article about a local news reporter. Oh my, what a scandal.";
+             }
+             if ( this.read_count == 2 ) {
+               return "Half of these articles are about Cape Breton, Yawn.";
+             }
+             if ( this.read_count == 3 ) {
+               return "Apparently some local sports celebrity got really drunk and made an ass of himself.";
+             }
+             this.read_count = 0;
+             return "You scan over several pages that just list who is suing who." ; },
            verb_take: true
          }
 }
 
-function SodaCan() { 
-  return { name: function () { return "soda can"; },
-           verb_look: function (state) { 
-             return "TODO" ; },
-           verb_take: true
-         }
-}
 
 function PackOfCigs() { 
   return { name: function () { return "cigarette pack"; },
@@ -257,6 +269,8 @@ function get_adjacent_rooms() {
 function create() {
   var state = common.createGameState(ROOMS(), "road"); 
   var story = common.createStory(state, CMDS);
+
+  state.backpack.push( FrankMagazine() );
   // Override the default behaviour
   story.get_adjacent_rooms = get_adjacent_rooms; 
   return story;

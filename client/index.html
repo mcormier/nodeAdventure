@@ -6,17 +6,18 @@
   <link rel="stylesheet" type="text/css" href="client.css">
 </head>
 <body>
-
+<!-- http://www.network-science.de/ascii/ -->
   <div id="narrative">
     <div id="workarea">
 
       <div class="startScreen">
 <pre>
-  /  __)    /  \    (__    __) (__    __)  )  ____) 
- |  /      /    \      |  |       |  |    (  (___   
- | |      /  ()  \     |  |       |  |     \___  \  
- |  \__  |   __   |    |  |       |  |     ____)  ) 
- _\    )_|  (__)  |____|  |_______|  |____(      (__
+_________     _________________________ _________
+\_   ___ \   /  _  \__    ___/   _____//   _____/
+/    \  \/  /  /_\  \|    |  \_____  \ \_____  \ 
+\     \____/    |    \    |  /        \/        \
+ \______  /\____|__  /____| /_______  /_______  /
+        \/         \/               \/        \/ 
     _/\/\/\/\/\______/\/\/\/\______/\/\______/\/\/\___
    _________/\/\__/\/\____/\/\__/\/\/\____/\/\/\/\___ 
   ___/\/\/\/\____/\/\__/\/\/\____/\/\__/\/\__/\/\___  
@@ -36,10 +37,14 @@ _/\/\/\/\/\/\____/\/\/\/\______/\/\________/\/\___
 
     </div>
   </div>
-
+ <div class="msgBoard" style="position:absolute; top:1300px">
+  <a href="http://martha.coleharbour.ca">
+    <img src="http://www.coleharbour.ca/splash.jpg" width="100%">
+  </a>
+  </div>
   <script>
 
-    var local = true;
+    var local = false;
     var cursorAnim;
     var command_string = "";
 
@@ -156,14 +161,14 @@ _/\/\/\/\/\/\____/\/\/\/\______/\/\________/\/\___
       // Handle control characters first
       if (e.keyCode == 13 ) {
         handleEnter(e);
-        return;
+        return false;
       }
 
       // Handle deletes
       if (e.keyCode == 8 ) { 
         command_string = command_string.substring(0,command_string.length-1);
         input_elem.innerHTML = htmlForString(command_string);
-        return; 
+        return false; 
       }
     
       // Ignore other control characters, TAB, etc..
@@ -173,6 +178,7 @@ _/\/\/\/\/\/\____/\/\/\/\______/\/\________/\/\___
       command_string = command_string + String.fromCharCode(e.keyCode);
 
       input_elem.innerHTML = htmlForString(command_string);
+      return false;
     }
 
     function handleEnter(e) {
