@@ -108,7 +108,18 @@ function SodaCan() {
 function PackOfCigs() { 
   return { name: function () { return "cigarette pack"; },
            verb_look: function (state) { 
-             return "TODO" ; },
+             return "It's a crumpled pack of cigarettes.  Hey there's one left, this must be your lucky day!" ; },
+           verb_use: function (state) {  
+              if (state.room_name == "shoe_inside" ) {
+               state.remove_from_backpack(this.name());
+               var dude = state.remove_item("dude");
+               state.get_room("road").items.push(dude);
+               
+               state.get_room().exits[3] = "hallway";
+
+               return "You put the pack of cigarettes on an empty table near the dude.  He notices them and delcares \"There they are!\" like he's found his missing leg and heads outside. You can now use the hallway to the south.";
+              }
+              return "The surgeon general says that smoking is hazardous to your health. You probably need that last cigarette for some plot point, why don't you try it in another area?"; },
            verb_take: true
          }
 }
@@ -116,12 +127,26 @@ function PackOfCigs() {
 function Bartender() { 
   return { name: function () { return "bartender"; },
            verb_look: function (state) { 
-             return "The bartender has lots of piercing's. She's pretty busy dealing with patrons." ; },
+             return "The bartender has lots of piercing's. She's pretty busy dealing with patrons. "+
+                     "You get glance at her cleavage a second too long"; },
            verb_talk: function (state) { 
              return "Pekza who? I have no idea what you're talking about." ; }
          }
 }
 
+
+function Dude() { 
+  return { name: function () { return "dude"; },
+           verb_look: function (state) { 
+             return  "He's a dude but not the dude you're looking for. "+
+                     "He might be the bouncer as he's popping out of his T-shirt.  He's "+
+                     "blocking the hallway to the Backstage Bar and you notice nicotine stains on his fingers." ; },
+           verb_talk: function (state) { 
+             return "The dude's a real chatty Cathy.  You try to ask him to move out of the way but "+
+                    "he thinks he knows you and starts telling you about how great he's been doing " +
+                    "on his new diet.  You can't get a word in edgewise." ; }
+         }
+}
 
 
 
@@ -148,6 +173,12 @@ function ROOMS() {
       items: [ BackstageDoor() ],
       exits: [null, null, "road", null]
     },
+     "backstage_inside": {
+      short: "The Backstage Bar",
+      long: "You are in the Backstage Bar.",
+      items: [ ],
+      exits: ["hallway", null, null, null]
+    },
     "shoe_out": {
       short: "The Economy Shoe Shop",
       long: "You are on the front step of the Economy Shoe Shop .",
@@ -158,9 +189,16 @@ function ROOMS() {
       short: "The Economy Shoe Shop",
       long: "You are in the Economy Shoe Shop. People are chatting amongst themselves. " + 
             "You don't see anyone you know here.",
-      items: [ Bartender() ],
+      items: [ Bartender(), Dude() ],
       exits: [null, null, null, null ]
+    },
+    "hallway": {
+      short: "A hallway",
+      long: "You are in hallway between the shoe and the backstage bar. ",
+      items: [  ],
+      exits: ["shoe_inside", null, null, "backstage_inside"]
     }
+
 
 
 
@@ -187,11 +225,12 @@ function get_adjacent_rooms() {
 
 function create() {
   var state = common.createGameState(ROOMS(), "shoe_inside"); 
+  state.backpack.push( PackOfCigs() );
+
   var story =  common.createStory(state, CMDS);
 
   // Override the default behaviour
   story.get_adjacent_rooms = get_adjacent_rooms; 
-
   return story;
 }
 

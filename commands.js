@@ -174,9 +174,6 @@ State.prototype.get_target = function(target_name) {
       return items[i];
     }
   }
-
-  //console.log("TODO -- throw exception when requesting a non_existant target:" + target_name);
-  //throw { name: "NoSuchItem", message: "I don't see that item here" }
 }
 
 State.prototype.get_item = function(target_name) { 
@@ -220,8 +217,9 @@ State.prototype.remove_item = function(target_name) {
   var items = this.get_room().items;
   for ( var i = 0; i < items.length; i++) {
     if ( target_name == items[i].name() ) {
+      var removed = items[i];
       items.splice(i,1);
-      return; 
+      return removed; 
     }
   }
 }
