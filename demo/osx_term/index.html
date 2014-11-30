@@ -3,14 +3,51 @@
   <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
   <script src="http://mcormier.github.io/js/PPUtils-1.0.0.js"></script>
 
+  <script src="../common.js"></script>
+
+  <script>
+
+   function addDivWithText(msg) {
+       var promptContainer = $("promptContainer");
+       var display = promptContainer.parentNode;
+       var div = document.createElement("div");
+       div.className = "text_response";
+
+       // Only convert blank lines or else word wrap won't work
+       if (!msg.replace(/\s/g, "").length) {
+         div.innerHTML = htmlForString(msg);
+       } else {
+         div.innerHTML = msg;
+       }
+       display.insertBefore(div, promptContainer);
+    }
+
+
+
+    var command_string = "";
+    var socket;
+    function init() {
+      socket = getWebSocket(false);
+      socket.on('stories', function(storyList) { socket.emit('chooseStory', 'DarkSecret'); } );
+      socket.on('display', displayHandler );
+      socket.on('errorMsg', errorMsgHandler );
+      socket.on('displayMessage', displayMsgHandler );
+
+      document.onkeypress=captureKeyInput;
+      window.setInterval( toggleCursorVisibility, 600);
+    }
+
+    PPUtils.bind("load", window, init);
+  </script>
+
   <link rel="stylesheet" type="text/css" href="client.css">
 </head>
 <body>
 <!-- 
- Style copied from
+ Style based on ...
 https://try.github.io/levels/1/challenges/1#
 -->
-  <div id="inner">
+  <div class="inner">
 
     <div class="toolbar">
 
@@ -24,6 +61,27 @@ https://try.github.io/levels/1/challenges/1#
         <span class="title-console">Dark Secret Software</span>
       </div>
     </div>
+
+
+    <div class="panel-group editor-reference active"
+            id="narrative">
+
+      <div class="editor console panel cs-console cs-console-height cs-console-width active editor-active"
+              id="workarea">
+
+        <div class="console" id="promptContainer" >
+          <div id="cmd">
+            <div id="prompt"> &gt; </div>
+              <span id="cmd_input"></span>
+              <div id="cursor"></div>
+          </div>
+        </div>
+
+
+      </div>
+
+    </div>
+
 
   </div>
 
