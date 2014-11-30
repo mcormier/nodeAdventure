@@ -1,0 +1,71 @@
+@font-face {
+  font-family:'OpenSansRegular';
+  src: url(OpenSans-Regular-webfont.woff) format("woff");
+  font-weight:
+  normal;
+  font-style:normal
+}
+
+@font-face{
+  font-family:'OpenSansBold';
+  src: url(//d13jv82ekraqyq.cloudfront.net/assets/OpenSans-Bold-webfont.woff) format("woff");
+  font-weight:normal;
+  font-style:normal
+}
+
+body { background: #4183c4; }
+
+.inner {
+  margin: 0 auto;
+  max-width: 1300px;
+  padding: 0 60px;
+}
+
+.toolbar {
+  background-color: #efedee;
+  background-image: -webkit-linear-gradient(top, #efedee, #c1c1c1);
+  border-radius: 3px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border: 1px solid #6287A4;
+  border-bottom: 0;
+  height: 30px;
+  margin-top: 20px;
+  position: relative;
+}
+
+.toolbar .controls {
+  left: 9px;
+  position: absolute;
+  top: 9px;
+}
+
+ul { list-style:none; margin:0; } 
+
+.toolbar .controls li {
+  float: left;
+  margin: 0 7px 0 0;
+}
+
+.toolbar .controls li a {
+  height: 13px;
+  width: 12px;
+  display:block;
+  color: transparent;
+  background: url(icon-control.png) no-repeat;
+}
+
+.toolbar .controls li a.close {
+  background: url(icon-close.png) no-repeat;
+}
+
+a { text-decoration:none; }
+
+.toolbar .title {
+  color: #000;
+  display: block;
+  font: 1.3em "Helvetica Neue",Helvetica,Arial,sans-serif;
+  line-height: 30px;
+  text-align: center;
+  text-shadow: 0 1px 0 #fff;
+}
