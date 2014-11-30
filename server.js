@@ -45,7 +45,7 @@ io.on('connection', function (socket) {
 
   function startStory() {
     story = storyManager.readStory(storyName);
-    console.log("Client started story: " + storyName);
+    console.log(new Date() + " Client started story: " + storyName);
   }
 
   // Give the client a list of stories to choose from

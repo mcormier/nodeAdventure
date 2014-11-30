@@ -30,11 +30,11 @@ function DiamondDoor() {
            verb_look: function (state) { 
              return "You see someone familiar through the door window, near the back of the bar. Unfortunately they don't see you."; },
            verb_open: function (state) { 
-             if ( this.trash_added == false ) {
+             /*if ( this.trash_added == false ) {
                var road = state.get_room("road");
                road.items.push(Trash());
                this.trash_added = true;
-             }
+             } */
 
              this.open_count++;
              var extra_str = "One of them glares at you.";
@@ -44,8 +44,8 @@ function DiamondDoor() {
 
              return "The door is locked! It looks like a group of women were cold so "
                   + "they locked it. "+ extra_str ; },
-           open_count: 0,
-           trash_added: false
+           open_count: 0
+           //trash_added: false
          }
 }
 
@@ -213,7 +213,7 @@ function ROOMS() {
     "backstage_out": {
       short: "The Backstage Bar",
       long: "You are on the front step of the Backstage Bar.",
-      items: [ BackstageDoor() ],
+      items: [ BackstageDoor() , Trash()],
       exits: [null, null, "road", null]
     },
      "backstage_inside": {
