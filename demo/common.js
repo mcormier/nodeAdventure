@@ -55,6 +55,17 @@
     // Could push this into an editor class
     function captureKeyInput(e) {
       var input_elem = $("cmd_input");
+      console.log("-->" + e.keyCode);
+      console.log(e);
+
+      if ( typeof e.preventDefault != "undefined" ) {
+        console.log("found preventDefault");
+        e.preventDefault();
+        e.returnValue = false;
+        cancelBubble = true;
+        e.stopImmediatePropagation();
+        e.bubbles = false;
+      } 
 
       // Handle control characters first
       if (e.keyCode == 13 ) {
@@ -66,6 +77,7 @@
       if (e.keyCode == 8 ) { 
         command_string = command_string.substring(0,command_string.length-1)
         input_elem.innerHTML = htmlForString(command_string);
+        e.preventDefault();
         return false; 
       }
     
@@ -78,6 +90,16 @@
       input_elem.innerHTML = htmlForString(command_string);
       return false;
     }
+
+
+    function keyDownHandler(e) {
+      // Fix for Chrome MAC delete key causes page to navigate back
+      if (e.keyCode == 8 ) {
+        captureKeyInput(e);
+        e.bubbles = false;
+      } 
+    } 
+
 
     function handleEnter(e) {
       if (e.keyCode == 13 ) {

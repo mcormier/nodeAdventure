@@ -33,7 +33,9 @@
       socket.on('errorMsg', errorMsgHandler );
       socket.on('displayMessage', displayMsgHandler );
 
-      document.onkeypress=captureKeyInput;
+      PPUtils.bind('keydown', document, keyDownHandler, false)
+      PPUtils.bind('keypress', document, captureKeyInput, true)
+
       window.setInterval( toggleCursorVisibility, 600);
     }
 
