@@ -8,14 +8,17 @@
   <script>
     var command_string = "";
     var socket;
+
     function init() {
       socket = getWebSocket(false);
       socket.on('stories', function(storyList) { socket.emit('chooseStory', 'CATSS'); } );
       socket.on('display', displayHandler );
       socket.on('errorMsg', errorMsgHandler );
       socket.on('displayMessage', displayMsgHandler );
+      
+      PPUtils.bind('keydown', document, keyDownHandler, false)
+      PPUtils.bind('keypress', document, captureKeyInput, true)
 
-      document.onkeypress=captureKeyInput;
       window.setInterval( toggleCursorVisibility, 600);
     }
 
@@ -56,6 +59,12 @@ _/\/\/\/\/\/\____/\/\/\/\______/\/\________/\/\___
       </div>
 
     </div>
+  </div>
+
+ <div class="msgBoard" style="position:absolute; top:1300px">
+  <a href="http://martha.coleharbour.ca">
+    <img src="http://www.coleharbour.ca/splash.jpg" width="100%">
+  </a>
   </div>
 
 </body>
