@@ -270,7 +270,6 @@ function create() {
   var state = common.createGameState(ROOMS(), "road"); 
   var story = common.createStory(state, CMDS);
 
-  state.backpack.push( FrankMagazine() );
   // Override the default behaviour
   story.get_adjacent_rooms = get_adjacent_rooms; 
   return story;
