@@ -55,11 +55,14 @@
     // Could push this into an editor class
     function captureKeyInput(e) {
       var input_elem = $("cmd_input");
-      console.log("-->" + e.keyCode);
+
+      // Firefox uses charChode.  Webkit (Safari/Chrome) uses keyCode.
+      var key = e.keyCode ? e.keyCode : e.charCode;
+      console.log("-->" + key);
       console.log(e);
 
       if ( typeof e.preventDefault != "undefined" ) {
-        console.log("found preventDefault");
+      //  console.log("found preventDefault");
         e.preventDefault();
         e.returnValue = false;
         cancelBubble = true;
@@ -68,24 +71,20 @@
       } 
 
       // Handle control characters first
-      if (e.keyCode == 13 ) {
+      if (key == 13 ) {
         handleEnter(e);
         return false;
       }
 
       // Handle deletes
-      if (e.keyCode == 8 ) { 
+      if (key == 8 ) { 
         command_string = command_string.substring(0,command_string.length-1)
         input_elem.innerHTML = htmlForString(command_string);
         e.preventDefault();
         return false; 
       }
-    
-      // Ignore other control characters, TAB, etc..
-      // but allow space
-      //if (  e.keyCode < 64  ||  e.keyCode != 32 ) { return; }
 
-      command_string = command_string + String.fromCharCode(e.keyCode);
+      command_string = command_string + String.fromCharCode(key);
 
       input_elem.innerHTML = htmlForString(command_string);
       return false;
@@ -93,16 +92,27 @@
 
 
     function keyDownHandler(e) {
+      var key = e.keyCode ? e.keyCode : e.charCode;
+
       // Fix for Chrome MAC delete key causes page to navigate back
-      if (e.keyCode == 8 ) {
-        captureKeyInput(e);
+      if (key == 8 ) {
+        if( ! PPUtils.isFirefox() ) {
+          captureKeyInput(e);
+        }
         e.bubbles = false;
       } 
+
+      if (key == 32 && PPUtils.isFirefox() ) {
+        e.bubbles = false;
+      } 
+
     } 
 
 
     function handleEnter(e) {
-      if (e.keyCode == 13 ) {
+      var key = e.keyCode ? e.keyCode : e.charCode;
+
+      if (key == 13 ) {
         addBlankLIneToMonitor();
         addTextToMonitor('> ' + command_string);
         socket.emit('command', command_string);
