@@ -1,5 +1,7 @@
 #!/bin/env node
 
+var parser  = require('./command_parser.js');
+
 var port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP;
 if (typeof ipaddress === "undefined") {
@@ -18,23 +20,6 @@ var io  = require('socket.io')(app);
 
 var storyManager = require("./storyManager");
 console.log("Stories loaded " + storyManager.stories() );
-
-
-function parse_command( request ) {
-  var command = {};
-  var normalized = request.toLowerCase();
-  var words = normalized.split(' ');
-
-  command.verb = words[0];
-  if ( words.length > 1 ) {
-    var start_target = normalized.indexOf(' ');
-    command.target = normalized.substring(start_target+1);
-  } else {
-    command.target = "";
-  }
-
-  return command
-}
 
 
 io.on('connection', function (socket) {
@@ -69,7 +54,7 @@ io.on('connection', function (socket) {
       return;
     }
 
-    command = parse_command(request); 
+    command = parser.parse_command(request); 
 
     try {
       var response = story.process_command(command);
