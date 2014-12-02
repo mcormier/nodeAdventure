@@ -241,7 +241,7 @@ Story.prototype.process_command = function(cmd) {
   if ( this.cmds[cmd.verb] ) {
     return this.cmds[cmd.verb]( this.state, cmd.verb, cmd.target, this.cmds );
   } else {
-    return "Syntax error";
+    return "Syntax error - Try 'HELP'";
   }   
 
 }
