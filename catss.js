@@ -233,7 +233,8 @@ function ROOMS() {
       long: "You are in the Economy Shoe Shop. People are chatting amongst themselves. " + 
             "You don't see anyone you know here.",
       items: [ Bartender(), Dude() ],
-      exits: [null, null, "shoe_out", null ]
+      exits: [null, null, "shoe_out", null ],
+      adj_rooms: [ { direction: "west", name: "the street" } ]
     },
     "hallway": {
       short: "A hallway",
@@ -252,6 +253,13 @@ function ROOMS() {
 function get_adjacent_rooms() {
   var adj_rooms = [];
   var room = this.state.get_room();
+
+  // The adjacent room descriptions can be manually defined
+  if ( room.adj_rooms != undefined ) {
+    return room.adj_rooms;
+  }
+
+  // Or generated dynamically
   var dir = ["north", "east", "west", "south"];
   for ( var i = 0; i < room.exits.length; i++ ) {
     if (room.exits[i] != null ) {
