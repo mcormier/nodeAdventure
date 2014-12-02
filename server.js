@@ -54,7 +54,7 @@ io.on('connection', function (socket) {
       return;
     }
 
-    command = parser.parse_command(request); 
+    command = parser.parse_command(request, story.command_synonyms() ); 
 
     try {
       var response = story.process_command(command);

@@ -274,6 +274,16 @@ Story.prototype.default_context = function() {
            items: items };
 }
 
+// Replace this function with synonyms for your story if
+// you want to support synonyms.
+//
+// i.e. { "pack of cigarettes": "cigarette pack"}
+//
+// will remap pack of cigarettes to cigarette pack
+//
+Story.prototype.command_synonyms = function() {
+  return { };
+}
 
 function createStory(state,cmds) {
   return new Story(state, cmds);

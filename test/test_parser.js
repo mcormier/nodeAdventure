@@ -7,6 +7,12 @@ var parser  = require('../command_parser.js');
 
 
 console.log( parser.parse_command("LOOK DOOR") );
-console.log( parser.parse_command("LOOK AT DOOR") );
+console.log( parser.parse_command("LOOK AT DOOR") ); // At should be removed
 console.log( parser.parse_command("OPEN DOOR") );
 console.log( parser.parse_command("GO NORTH") );
+console.log( parser.parse_command("TAKE CIGARETTE PACK") );
+console.log( parser.parse_command("TAKE PACK OF CIGARETTES") );
+
+// Test synonym parsing.  Pack of cigarettes should bet replaced with cigarette pack
+console.log( parser.parse_command("TAKE PACK OF CIGARETTES", 
+             { "pack of cigarettes": "cigarette pack"} ) );

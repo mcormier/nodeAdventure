@@ -263,12 +263,17 @@ function get_adjacent_rooms() {
  return adj_rooms;
 } 
 
+function target_synonyms() {
+  return { "pack of cigarettes": "cigarette pack"};
+}
 
 // -------------------------------------------------------------------------
 
 function create() {
   var state = common.createGameState(ROOMS(), "road"); 
   var story = common.createStory(state, CMDS);
+
+  story.command_synonyms = target_synonyms;
 
   // Override the default behaviour
   story.get_adjacent_rooms = get_adjacent_rooms; 
