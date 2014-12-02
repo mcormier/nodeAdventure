@@ -32,6 +32,26 @@ io.on('connection', function (socket) {
     console.log(new Date() + " Client started story: " + storyName);
   }
 
+  function processError(e) {
+
+    if (e.name == "GameOver" ) {
+      startStory();
+      socket.emit('displayMessage', e.message + "  \n \n ** Game over. ** " );
+      return;
+    } 
+
+    if (e.name == "StartOver" ) {
+      startStory();
+      socket.emit('displayMessage', "Game reset." );
+      return;
+    } 
+
+    console.log(e.stack)
+    socket.emit('errorMsg', e.message );
+    
+ 
+  }
+
   // Give the client a list of stories to choose from
   socket.emit('stories', storyManager.stories() );
 
@@ -64,13 +84,7 @@ io.on('connection', function (socket) {
         socket.emit('display', story.default_context() );
       }
     } catch (e) {
-      if (e.name == "StartOver" ) {
-        startStory();
-        socket.emit('displayMessage', "Game reset." );
-      } else {
-        console.log(e.stack)
-        socket.emit('errorMsg', e.message );
-      }
+      processError(e);
     }
   });
 

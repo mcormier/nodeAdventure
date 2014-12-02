@@ -171,6 +171,37 @@ function Bartender2() {
          }
 }
 
+function Urinal() { 
+  return { name: function () { return "urinal"; },
+           verb_look: function (state) { 
+             return "It looks like a urinal.  Eating the urinal cake is not recommended."; },
+           verb_use: function (state) { 
+             return "You unzip your pants and let out a relieving stream of liquid.  Ahhhh."; }
+         }
+}
+
+// Leisure suit Larry -- Flush toilet scene
+//
+// Command: Flush toilet
+//
+// Realizing your mistake, you quickly jiggle the handle, attempting to stem 
+// the onrushing tide of water.
+//
+// It doesn't work.
+//
+// Your life passes before your eyes.
+//
+// Bad idea, eh Larry?
+
+function Toilet() { 
+  return { name: function () { return "toilet"; },
+           verb_look: function (state) { 
+             return "What exactly are you looking for?  You see lots of porcelain."; },
+           verb_use: function (state) { 
+             throw { name: "GameOver", message:"You flush the toilet and the stall locks shut.  You quickly jiggle the handle, attempting to stem the onrushing tide of water.  It doesn't work.  Your life passes before your eyes.  You're such a Larry."} }
+         }
+}
+
 
 
 function Dude() { 
@@ -256,7 +287,13 @@ function ROOMS() {
       short: "A hallway",
       long: "You are in the hallway between the shoe and the backstage bar. Waiters and waitresses zip by you with freshly made nacho plates.",
       items: [  ],
-      exits: ["shoe_inside", null, null, "backstage_inside"]
+      exits: ["shoe_inside", null, "washroom", "backstage_inside"]
+    },
+    "washroom": {
+      short: "A washroom",
+      long: "You are in teh washroom.  There are farside comics stapled to a peg board above the urinals.",
+      items: [ Urinal(), Toilet() ],
+      exits: [null, "hallway", null, null]
     }
 
 
