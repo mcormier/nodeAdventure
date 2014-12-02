@@ -1,5 +1,8 @@
 var common  = require('./commands.js');
 
+// -------------------------------------------------------------------------
+// Custom commands
+// -------------------------------------------------------------------------
 function talk(state, verb, target_name, cmds) {
 
   if ( target_name.trim()  == "" ) { return "You mutter to yourself."; }
@@ -9,6 +12,13 @@ function talk(state, verb, target_name, cmds) {
   return target.verb_talk(state);;
 }
 
+function give(state, verb, target_name, cmds) {
+  var target = state.get_target(target_name);
+  common.check_verb(target, "give");
+  return target.verb_give(state);;
+}
+
+
 function read_item(state, verb, target_name, cmds) {
   var target = state.get_target(target_name);
   common.check_verb(target,"read");
@@ -17,8 +27,8 @@ function read_item(state, verb, target_name, cmds) {
 
 
 var CMDS = common.commands();
-// Add a custom command for this game.
 CMDS.talk = talk;
+CMDS.give = give;
 CMDS.read = read_item;
 
 
@@ -30,12 +40,6 @@ function DiamondDoor() {
            verb_look: function (state) { 
              return "You see someone familiar through the door window, near the back of the bar. Unfortunately they don't see you."; },
            verb_open: function (state) { 
-             /*if ( this.trash_added == false ) {
-               var road = state.get_room("road");
-               road.items.push(Trash());
-               this.trash_added = true;
-             } */
-
              this.open_count++;
              var extra_str = "One of them glares at you.";
              if ( this.open_count % 2 == 0 ) {
@@ -45,7 +49,6 @@ function DiamondDoor() {
              return "The door is locked! It looks like a group of women were cold so "
                   + "they locked it. "+ extra_str ; },
            open_count: 0
-           //trash_added: false
          }
 }
 
@@ -122,17 +125,30 @@ function PackOfCigs() {
   return { name: function () { return "cigarette pack"; },
            verb_look: function (state) { 
              return "It's a crumpled pack of cigarettes.  Hey there's one left, this must be your lucky day!" ; },
-           verb_use: function (state) {  
-              if (state.room_name == "shoe_inside" ) {
+           move_dude: function(state) {
                state.remove_from_backpack(this.name());
                var dude = state.remove_item("dude");
                state.get_room("road").items.push(dude);
-               
-               state.get_room().exits[3] = "hallway";
+               var room = state.get_room();
+               room.exits[3] = "hallway";
+               room.adj_rooms.push( { direction: "south", name: state.get_room("hallway").short } );
+           },
+
+           verb_use: function (state) {  
+              if (state.room_name == "shoe_inside" ) {
+               this.move_dude(state);
 
                return "You put the pack of cigarettes on an empty table near the dude.  He notices them and delcares \"There they are!\" like he's found his missing leg and heads outside. You can now use the hallway to the south.";
               }
               return "The surgeon general says that smoking is hazardous to your health. You probably need that last cigarette for some plot point, why don't you try it in another area?"; },
+
+           verb_give: function (state) {  
+              if (state.room_name == "shoe_inside" ) {
+               this.move_dude(state);
+               return "You give the pack of cigarettes to the dude.  He uncharacteristically bows and heads outside. You can now use the hallway to the south.";
+              }
+              return "You probably need that last cigarette for some plot point, why don't you try it in another area?"; },
+ 
            verb_take: true
          }
 }
@@ -259,7 +275,8 @@ function get_adjacent_rooms() {
     return room.adj_rooms;
   }
 
-  // Or generated dynamically
+
+  // Generated dynamically
   var dir = ["north", "east", "west", "south"];
   for ( var i = 0; i < room.exits.length; i++ ) {
     if (room.exits[i] != null ) {
@@ -268,11 +285,13 @@ function get_adjacent_rooms() {
     }
   }
 
+
  return adj_rooms;
 } 
 
 function target_synonyms() {
-  return { "pack of cigarettes": "cigarette pack"};
+  return { "pack of cigarettes": "cigarette pack", 
+           "cigarettes": "cigarette pack"};
 }
 
 // -------------------------------------------------------------------------
