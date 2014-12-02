@@ -118,8 +118,7 @@ function Key() {
                if ( state.room_name != 'foyer') {
                  return "There's nowhere to plug it in.";
                } 
-               var room = state.get_room();
-               var computer = room.get_item("computer");
+               var computer = state.get_item("computer");
                if ( computer.locked ) {
                  computer.locked = false;
                  return "You slied the key into the USB slot of the PC.  The PC springs to life.";
