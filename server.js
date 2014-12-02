@@ -46,7 +46,7 @@ io.on('connection', function (socket) {
       return;
     } 
 
-    console.log(e.stack)
+    console.log("Error occurred: " + e)
     socket.emit('errorMsg', e.message );
     
  
