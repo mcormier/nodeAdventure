@@ -74,7 +74,7 @@ function ShoeShopDoor() {
                this.closed = false;
                var room = state.get_room();
                room.exits[1] = "shoe_inside";
-               return "The door opens effortlessly.";
+               return "The door opens effortlessly. To the east, you see inside the Shoe Shop.";
             },
            verb_close: function (state) { 
              if ( this.closed) { return "The door is already closed"; }
