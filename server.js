@@ -12,6 +12,7 @@ if (typeof ipaddress === "undefined") {
 var http = require('http');
 
 var app = http.createServer(function (req, res) {
+  console.log("HTTP request: " + req.method + " for " + req.url  + " " + new Date() );
   res.writeHead(200, {'Content-Type': 'text/plain'});
   res.end('"If they can get you asking the wrong questions, they don\'t have to worry about answers."\n -- Thomas Pynchon, Gravity\'s Rainbow \n');
 }).listen(port, ipaddress);
@@ -21,20 +22,26 @@ var io  = require('socket.io')(app);
 var storyManager = require("./storyManager");
 console.log("Stories loaded " + storyManager.stories() );
 
+var session_cnt = 0;
 
 io.on('connection', function (socket) {
+
+  session_cnt = session_cnt + 1;
+  var sess_id = session_cnt;
+  console.log(sess_id + " Establishing new session     " + new Date() );
 
   var storyName = null;
   var story = null;
 
   function startStory() {
     story = storyManager.readStory(storyName);
-    console.log(new Date() + " Client started story: " + storyName);
+    console.log(sess_id + " Client started story: " + storyName + "    " + new Date() );
   }
 
   function processError(e) {
 
     if (e.name == "GameOver" ) {
+      console.log(sess_id + " Uh oh. Game Over!!     " + new Date() );
       startStory();
       socket.emit('displayMessage', e.message + "  \n \n ** Game over. ** " );
       return;
@@ -46,7 +53,7 @@ io.on('connection', function (socket) {
       return;
     } 
 
-    console.log("Error occurred: " + e)
+    console.log(sess_id + " Error occurred: " + e + "    " + new Date() )
     socket.emit('errorMsg', e.message );
     
  
@@ -68,11 +75,13 @@ io.on('connection', function (socket) {
   socket.on('command', function(request) {
 
     if (storyName == null) {
-      console.log("Can't send a command if no story chosen");
+      console.log(sess_id + " Can't send a command if no story chosen " + new Date() );
       socket.emit('errorMsg', 'ERROR - need to choose the story first. ' );
       socket.emit('errorMsg', 'Available stories ' + storyManager.stories() );
       return;
     }
+
+    console.log( sess_id + " user input ***" + request + "***   " + new Date());
 
     command = parser.parse_command(request, story.command_synonyms() ); 
 
