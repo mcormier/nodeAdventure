@@ -22,10 +22,16 @@ function parse_command( request, synonymMap ) {
     var start_target = normalized.indexOf(' ');
     command.target = normalized.substring(start_target+1);
    
-    // Remove 'at ' to support look at door 
+    // Remove 'at ' to support "look at door" == "look door"
     if ( string_starts_with(command.target, 'at ') ) {
       command.target = normalized.substring(start_target+4);
     }
+
+    // Remove 'to ' to support "talk to bartender" == "talk bartender"
+    if ( string_starts_with(command.target, 'to ') ) {
+      command.target = normalized.substring(start_target+4);
+    }
+
 
    // Remap target synonyms.  PACK OF CIGARETTES -> CIGARETTE PACK
    if (synonymMap != undefined ) {

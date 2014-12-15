@@ -8,6 +8,7 @@ var parser  = require('../command_parser.js');
 
 console.log( parser.parse_command("LOOK DOOR") );
 console.log( parser.parse_command("LOOK AT DOOR") ); // At should be removed
+console.log( parser.parse_command("TALK TO BARTENDER") ); // To should be removed
 console.log( parser.parse_command("OPEN DOOR") );
 console.log( parser.parse_command("GO NORTH") );
 console.log( parser.parse_command("TAKE CIGARETTE PACK") );
