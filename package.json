@@ -1,7 +1,7 @@
 {
-  "name": "OpenShift-Sample-App",
+  "name": "node adventure game",
   "version": "1.0.0",
-  "description": "OpenShift Sample Application",
+  "description": "A text adventure using node",
   "keywords": [
     "OpenShift",
     "Node.js",
@@ -9,14 +9,14 @@
     "openshift"
   ],
   "author": {
-    "name": "OpenShift",
-    "email": "ramr@example.org",
-    "url": "http://www.openshift.com/"
+    "name": "Matthieu Cormier",
+    "email": "mcormier@preenandprune.com",
+    "url": "http://mcormier.github.io/nodeAdventure/"
   },
-  "homepage": "http://www.openshift.com/",
+  "homepage": "http://www.preenandprune.com/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openshift/origin-server"
+    "url": "https://github.com/mcormier/nodeAdventure"
   },
   "engines": {
     "node": ">= 0.6.0",
