@@ -1,3 +1,11 @@
+// This file can be run stand alone to test the simple http server
+// or it can be included with a simple require and used by another portion
+// of the program.  
+//
+// If using require it can only be required once otherwise signal handlers
+// will be adde more than once. Basically, it has to be refactored
+// if you want to use multiple instances of it.
+
 
 var port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP;
@@ -14,13 +22,27 @@ var app = http.createServer(function (req, res) {
   res.end('"If they can get you asking the wrong questions, they don\'t have to worry about answers."\n -- Thomas Pynchon, Gravity\'s Rainbow \n');
 }).listen(port, ipaddress);
 
+
+function terminator(sig){
+  if (typeof sig === "string") {
+    console.log('%s: Received %s - terminating sample app ...',
+                 Date(Date.now()), sig);
+    process.exit(1);
+  }
+  console.log('%s: Node server stopped.', Date(Date.now()) );
+};
+
+process.on('exit', function() { terminator(); });
+
+['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT',
+ 'SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGTERM'
+].forEach(function(element, index, array) {
+  process.on(element, function() { terminator(element); });
+});
+
+
 function server() {
   return app;
 }
-
-// TODO -- listen for ... and exit gracefully
-//
-//  ['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT',
-//         'SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGTERM'
 
 exports.server = server;
